@@ -1,0 +1,7 @@
+/cmake-build-*
+/.idea
+/.PVS-Studio
+/CMakeLists.txt.user
+
+.vs/
+/out/
