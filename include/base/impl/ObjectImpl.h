@@ -44,7 +44,7 @@ public:
 
     QList<Property*> getProperties() const;
 
-protected:
+public:
     Object* m_parent = nullptr;
     QMap<QString, Property*> *m_props = nullptr;
 };

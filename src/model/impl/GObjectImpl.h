@@ -15,27 +15,17 @@ public:
 
     ObjectType getObjectType() const override { return ObjectType::kGObject; }
     bool isTypeOf(const ObjectType& type) const override;
+    void destory() override;
 
-    void destory();
-
-    void setFlags(int flags);
-    int getFlags() const;
-
-    bool isSelected() const;
-    bool isMoving() const;
-    bool isModified() const;
-    bool isVisible() const;
-    bool isFixed() const;
-
-    void setSelected(bool selected);
-    void setMoving(bool moving);
-    void setModified(bool modified);
-    void setVisible(bool visible);
-    void setFixed(bool fixed);
+    // 边界框
+    virtual QRectF getBoundingRect() const;
 
 public:
     quint32 m_flags = 0;
-
+    int     m_rotation = 0;
+    int     m_zValue = 0;
+    QPointF m_pos;
+    QRectF  m_boundingRect;
 };
 
 }

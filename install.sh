@@ -5,8 +5,8 @@ echo "cbb_home: $CBB_HOME"
 version=1.0.0
 echo "current library version: $version"
 
-debug_path=$CBB_HOME/Mango/BlockDiagram/lib_mango_bd_datamodel/${version}/lib/linux/x64/debug
-release_path=$CBB_HOME/Mango/BlockDiagram/lib_mango_bd_datamodel/${version}/lib/linux/x64/release
+debug_path=$CBB_HOME/cbb_releases/mango_bd_datamodel/${version}/lib/linux/x64/debug
+release_path=$CBB_HOME/cbb_releases/mango_bd_datamodel/${version}/lib/linux/x64/release
 
 # copy debug library
 if [ -d "$debug_path" ]; then

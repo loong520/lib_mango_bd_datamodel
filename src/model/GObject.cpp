@@ -7,62 +7,137 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-int GObject::getFlags() const
+quint32 GObject::getFlags() const
 {
-    return impl_ptr(GObject)->getFlags();
+    return impl_ptr(GObject)->m_flags;
 }
 
-void GObject::setFlags(int flags)
+void GObject::setFlags(quint32 flags)
 {
-    impl_ptr(GObject)->setFlags(flags);
+    impl_ptr(GObject)->m_flags = flags;
+}
+
+bool GObject::hasFlag(quint32 flag) const
+{
+    return (impl_ptr(GObject)->m_flags & flag) == flag;
+}
+
+void GObject::setFlag(quint32 flag, bool on)
+{
+    if (on) {
+        impl_ptr(GObject)->m_flags |= flag;
+    } else {
+        impl_ptr(GObject)->m_flags &= ~flag;
+    }
 }
 
 bool GObject::isSelected() const
 {
-    return impl_ptr(GObject)->isSelected();
+    return impl_ptr(GObject)->m_flags & ObjectIsSelected;
 }
 
 bool GObject::isMoving() const
 {
-    return impl_ptr(GObject)->isMoving();
+    return impl_ptr(GObject)->m_flags & ObjectIsMoving;
 }
 
 bool GObject::isModified() const
 {
-    return impl_ptr(GObject)->isModified();
+    return impl_ptr(GObject)->m_flags & ObjectIsModified;
 }
 
 bool GObject::isVisible() const
 {
-    return impl_ptr(GObject)->isVisible();
+    return impl_ptr(GObject)->m_flags & ObjectIsVisible;
 }
 
 bool GObject::isFixed() const
 {
-    return impl_ptr(GObject)->isFixed();
+    return impl_ptr(GObject)->m_flags & ObjectIsFixed;
 }
 
 void GObject::setSelected(bool selected)
 {
-    impl_ptr(GObject)->setSelected(selected);
+    if (selected) {
+        impl_ptr(GObject)->m_flags |= ObjectIsSelected;
+    } else {
+        impl_ptr(GObject)->m_flags &= ~ObjectIsSelected;
+    }
 }
 
 void GObject::setMoving(bool moving)
 {
-    impl_ptr(GObject)->setMoving(moving);
+    if (moving) {
+        impl_ptr(GObject)->m_flags |= ObjectIsMoving;
+    } else {
+        impl_ptr(GObject)->m_flags &= ~ObjectIsMoving;
+    }
 }
 
 void GObject::setModified(bool modified)
 {
-    impl_ptr(GObject)->setModified(modified);
+    if (modified) {
+        impl_ptr(GObject)->m_flags |= ObjectIsModified;
+    } else {
+        impl_ptr(GObject)->m_flags &= ~ObjectIsModified;
+    }
 }
 
 void GObject::setVisible(bool visible)
 {
-    impl_ptr(GObject)->setVisible(visible);
+    if (visible) {
+        impl_ptr(GObject)->m_flags |= ObjectIsVisible;
+    } else {
+        impl_ptr(GObject)->m_flags &= ~ObjectIsVisible;
+    }
 }
 
 void GObject::setFixed(bool fixed)
 {
-    impl_ptr(GObject)->setFixed(fixed);
+    if (fixed) {
+        impl_ptr(GObject)->m_flags |= ObjectIsFixed;
+    } else {
+        impl_ptr(GObject)->m_flags &= ~ObjectIsFixed;
+    }
+}
+
+QRectF GObject::getBoundingRect() const
+{
+    return impl_ptr(GObject)->getBoundingRect();
+}
+
+QPointF GObject::getPos() const
+{
+    return impl_ptr(GObject)->m_pos;
+}
+
+void GObject::setPos(const QPointF& pos)
+{
+    impl_ptr(GObject)->m_pos = pos;
+}
+
+
+int GObject::getRotation() const
+{
+    return impl_ptr(GObject)->m_rotation;
+}
+
+void GObject::setRotation(int angle)
+{
+    impl_ptr(GObject)->m_rotation = angle;
+}
+
+void GObject::translate(const QPointF& offset)
+{
+    impl_ptr(GObject)->m_pos += offset;
+}
+
+int GObject::getZValue() const
+{
+    return impl_ptr(GObject)->m_zValue;
+}
+
+void GObject::setZValue(int zValue)
+{
+    impl_ptr(GObject)->m_zValue = zValue;
 }

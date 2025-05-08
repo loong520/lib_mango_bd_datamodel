@@ -10,16 +10,34 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
+enum GObjectFlag {
+    ObjectIsSelected = 0x1,
+    ObjectIsMoving = 0x2,
+    ObjectIsModified = 0x4,
+    ObjectIsVisible = 0x8,
+    ObjectIsFixed = 0x10,
+};
+
 class GObject : public Object {
 public:
 
     /// 获取标志
     /// @return 标志
-    int getFlags() const;
+    quint32 getFlags() const;
 
     /// 设置标志
     /// @param flags 标志
-    void setFlags(int flags);
+    void setFlags(quint32 flags);
+
+    /// 检查是否存在指定的标志
+    /// @param flag 要检查的标志
+    /// @return 如果存在指定的标志，则返回true，否则返回false
+    bool hasFlag(quint32 flag) const;
+
+    /// 设置指定的标志
+    /// @param flag 要设置的标志
+    /// @param on 如果为true，则设置标志，否则清除标志
+    void setFlag(quint32 flag, bool on);
 
     /// 是否被选中
     /// @return 如果被选中，则返回true，否则返回false
@@ -60,6 +78,38 @@ public:
     /// 设置固定状态
     /// @param fixed 固定状态
     void setFixed(bool fixed);
+
+    /// 获取边界框
+    /// @return 边界框
+    QRectF getBoundingRect() const;
+
+    /// 获取位置
+    /// @return 位置
+    QPointF getPos() const;
+
+    /// 设置位置
+    /// @param pos 位置
+    void setPos(const QPointF& pos);
+
+    /// 获取旋转角度
+    /// @return 旋转角度
+    int getRotation() const;
+
+    /// 设置旋转角度
+    /// @param angle 旋转角度
+    void setRotation(int angle);
+
+    /// 移动
+    /// @param offset 偏移量
+    void translate(const QPointF& offset);
+
+    /// 获取z值
+    /// @return z值
+    int getZValue() const;
+
+    /// 设置z值
+    /// @param zValue z值
+    void setZValue(int zValue);
 
 };
 
