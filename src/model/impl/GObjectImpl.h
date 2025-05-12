@@ -20,6 +20,10 @@ public:
     // 边界框
     virtual QRectF getBoundingRect() const;
 
+    // 旋转角度
+    virtual void setRotation(int angle);
+    virtual void setRotation(QPointF center, int angle);
+
 public:
     quint32 m_flags = 0;
     int     m_rotation = 0;

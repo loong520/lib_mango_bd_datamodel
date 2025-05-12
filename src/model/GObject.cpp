@@ -124,7 +124,12 @@ int GObject::getRotation() const
 
 void GObject::setRotation(int angle)
 {
-    impl_ptr(GObject)->m_rotation = angle;
+    impl_ptr(GObject)->setRotation(angle);
+}
+
+void GObject::setRotation(QPointF center, int angle)
+{
+    impl_ptr(GObject)->setRotation(center, angle);
 }
 
 void GObject::translate(const QPointF& offset)

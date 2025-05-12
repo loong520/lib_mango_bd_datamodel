@@ -25,3 +25,13 @@ QRectF GObjectImpl::getBoundingRect() const
 {
     return m_boundingRect;
 }
+
+void GObjectImpl::setRotation(int angle)
+{
+    m_rotation = angle;
+}
+
+void GObjectImpl::setRotation(QPointF center, int angle)
+{
+    // TODO: implement
+}

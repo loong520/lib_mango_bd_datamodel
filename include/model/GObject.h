@@ -99,6 +99,11 @@ public:
     /// @param angle 旋转角度
     void setRotation(int angle);
 
+    /// 设置旋转角度
+    /// @param center 旋转中心
+    /// @param angle 旋转角度
+    void setRotation(QPointF center, int angle);
+
     /// 移动
     /// @param offset 偏移量
     void translate(const QPointF& offset);
