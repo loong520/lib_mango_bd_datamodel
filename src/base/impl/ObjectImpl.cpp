@@ -3,7 +3,7 @@
 //
 
 #include "ObjectImpl.h"
-#include "src/base/impl/PropertyImpl.h"
+#include "PropertyImpl.h"
 #include "PropertyDef.h"
 
 using namespace mango::blockdiagram::datamodel;
@@ -33,7 +33,7 @@ bool ObjectImpl::isTypeOf(const ObjectType &type) const
     return (type.getType() == ObjectType::kObject);
 }
 
-void ObjectImpl::destory()
+void ObjectImpl::Delete()
 {
 }
 

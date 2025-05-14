@@ -3,6 +3,11 @@
 //
 
 #include "Polygon.h"
-#include "impl/PolygonImpl.h"
+#include "PolygonImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
+
+Polygon* Polygon::New(Shape* parent)
+{
+    return PolygonImpl::New(parent);
+}

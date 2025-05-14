@@ -10,15 +10,7 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-enum GObjectFlag {
-    ObjectIsSelected = 0x1,
-    ObjectIsMoving = 0x2,
-    ObjectIsModified = 0x4,
-    ObjectIsVisible = 0x8,
-    ObjectIsFixed = 0x10,
-};
-
-class GObject : public Object {
+class MANGO_BD_DATAMODEL_API GObject : public Object {
 public:
 
     /// 获取标志
@@ -103,6 +95,12 @@ public:
     /// @param center 旋转中心
     /// @param angle 旋转角度
     void setRotation(QPointF center, int angle);
+
+    /// x轴镜像
+    void mirrorX();
+
+    /// y轴镜像
+    void mirrorY();
 
     /// 移动
     /// @param offset 偏移量

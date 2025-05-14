@@ -10,7 +10,7 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class PropertyDef : public Object {
+class MANGO_BD_DATAMODEL_API PropertyDef : public Object {
 public:
     /// 增加使用次数
     /// @param number 增加的次数

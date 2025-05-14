@@ -3,7 +3,7 @@
 //
 
 #include "PropertyDef.h"
-#include "impl/PropertyDefImpl.h"
+#include "PropertyDefImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 

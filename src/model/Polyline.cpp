@@ -3,6 +3,11 @@
 //
 
 #include "Polyline.h"
-#include "impl/PolylineImpl.h"
+#include "PolylineImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
+
+Polyline* Polyline::New(Shape* parent)
+{
+    return PolylineImpl::New(parent);
+}

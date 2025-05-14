@@ -3,5 +3,126 @@
 //
 
 #include "GraphElementImpl.h"
+#include "NodeImpl.h"
+#include "LabelImpl.h"
+#include "ShapeImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
+
+GraphElement* GraphElementImpl::New(Node* parent)
+{
+    if (parent == nullptr) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    GraphElementImpl* impl = new GraphElementImpl((Object*)parent);
+    obj_impl_ptr(Node, parent)->addGraphElement((GraphElementImpl*)impl);
+    return (GraphElement*)impl;
+}
+
+GraphElementImpl::GraphElementImpl(Object* parent) : GObjectImpl(parent)
+{
+    m_shape = (ShapeImpl*)ShapeImpl::New((GraphElement*)this);
+}
+
+bool GraphElementImpl::isTypeOf(const ObjectType& type) const
+{
+    auto typeId = type.getType();
+    if (typeId == ObjectType::kObject ||
+        typeId == ObjectType::kGObject ||
+        typeId == ObjectType::kGraphElement) {
+        return true;
+    }
+    return false;
+}
+
+void GraphElementImpl::Delete()
+{
+    if (!m_parent) {
+        // TODO: LOG_ERROR
+        return;
+    }
+
+    ObjectType::TypeId typeId = m_parent->getObjectType();
+    if (typeId == ObjectType::kNode) {
+        obj_impl_ptr(Node, m_parent)->removeGraphElement((GraphElementImpl*)this);
+    } else {
+        // TODO: LOG_ERROR
+        return;
+    }
+}
+
+QRectF GraphElementImpl::getBoundingRect() const
+{
+    QRectF rect;
+    if (m_shape) {
+        auto shapeRect = m_shape->getBoundingRect();
+        rect = rect.united(shapeRect);
+    }
+    for (auto label : m_labels) {
+        auto labelRect = label->getBoundingRect();
+        rect = rect.united(labelRect);
+    }
+    return rect;
+}
+
+void GraphElementImpl::setShape(ShapeImpl *shape)
+{
+    if (shape == nullptr) {
+        return;
+    }
+    if (shape == m_shape) {
+        return;
+    }
+
+    if (m_shape) {
+        ShapeImpl * oldShape = m_shape;
+        m_shape = shape;
+        oldShape->Delete();
+    } else {
+        m_shape = shape;
+    }
+}
+
+ShapeImpl *GraphElementImpl::getShape() const
+{
+    return m_shape;
+}
+
+void GraphElementImpl::addLabel(LabelImpl *label)
+{
+    if (label == nullptr) {
+        return;
+    }
+
+    if (m_labels.contains(label)) {
+        return;
+    }
+    m_labels.append(label);
+    label->setParent((Object*)this);
+}
+
+void GraphElementImpl::removeLabel(LabelImpl *label)
+{
+    if (label == nullptr) {
+        return;
+    }
+
+    m_labels.removeAll(label);
+    label->Delete();
+}
+
+QList<LabelImpl*> GraphElementImpl::getLabels() const
+{
+    return m_labels;
+}
+
+LabelImpl* GraphElementImpl::findMainName(const GraphElementImpl* element)
+{
+    for(auto lab : element->getLabels()) {
+        if (lab->getType() == LabelType::LabelForMainName) {
+            return lab;
+        }
+    }
+    return nullptr;
+}

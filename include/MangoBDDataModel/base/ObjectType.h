@@ -77,14 +77,36 @@ public:
     /// \param right 与之比较的值是 TypeId 的类型
     /// \return 是否相等
     bool operator==(ObjectType::TypeId right) const;
+    bool operator!=(ObjectType::TypeId right) const;
 
     /// 相等比较
     /// \param right 与之比较的值是 ObjectType 的类型
     /// \return 是否相等
     bool operator==(const ObjectType& right) const;
+    bool operator!=(const ObjectType& right) const;
 
 private:
     TypeId m_type;
+};
+
+
+enum MANGO_BD_DATAMODEL_API GObjectFlag {
+    ObjectIsSelected = 0x1,
+    ObjectIsMoving = 0x2,
+    ObjectIsModified = 0x4,
+    ObjectIsVisible = 0x8,
+    ObjectIsFixed = 0x10,
+};
+
+enum MANGO_BD_DATAMODEL_API LabelType {
+    LabelForMainName,
+    LabelForComment,
+};
+
+enum MANGO_BD_DATAMODEL_API ConnectMode {
+    ConnectModeFly = 0, // 飞线
+    ConnectModeNamed,   // 命名连线
+    ConnectModeDirect,  // 直接连线
 };
 
 } // end of namespace datamodel

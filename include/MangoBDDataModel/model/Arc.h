@@ -10,7 +10,7 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class Polygon : public GObject {
+class MANGO_BD_DATAMODEL_API Arc : public GObject {
 public:
 
 

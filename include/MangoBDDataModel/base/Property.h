@@ -11,7 +11,7 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class Property : public Object {
+class MANGO_BD_DATAMODEL_API Property : public Object {
 public:
     /// 获取属性名称
     /// @return 属性名称

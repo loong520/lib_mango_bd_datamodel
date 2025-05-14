@@ -3,9 +3,8 @@
 //
 
 #include "Object.h"
-#include "impl/ObjectImpl.h"
+#include "ObjectImpl.h"
 
-using namespace mango::blockdiagram;
 using namespace mango::blockdiagram::datamodel;
 
 ObjectType Object::getObjectType() const
@@ -29,10 +28,10 @@ bool Object::isAlive()
     return false;
 }
 
-void Object::destory()
+void Object::Delete()
 {
-    // 先调用实现类的destory方法, 移除关联信息
-    impl_ptr(Object)->destory();
+    // 先调用实现类的Delete方法, 移除关联信息
+    impl_ptr(Object)->Delete();
 
     // 再删除对象
     ObjectImpl* obj = (ObjectImpl*)this;

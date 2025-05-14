@@ -10,7 +10,7 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class Pin : public GraphElement {
+class MANGO_BD_DATAMODEL_API CompositePin : public GraphElement {
 public:
 
 

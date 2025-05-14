@@ -3,6 +3,7 @@
 //
 
 #include "Arc.h"
-#include "impl/ArcImpl.h"
+#include "ArcImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
+

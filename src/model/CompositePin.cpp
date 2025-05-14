@@ -3,6 +3,6 @@
 //
 
 #include "CompositePin.h"
-#include "impl/CompositePinImpl.h"
+#include "CompositePinImpl.h"
 
 using namespace mango::blockdiagram::datamodel;

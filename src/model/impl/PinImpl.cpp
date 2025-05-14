@@ -3,5 +3,82 @@
 //
 
 #include "PinImpl.h"
+#include "NodeImpl.h"
+#include "SymbolImpl.h"
+#include "LabelImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
+
+Pin* PinImpl::New(Node* parent, const QString& name, bool inBoundary)
+{
+    if (parent == nullptr) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PinImpl* impl = new PinImpl(name, (Object*)parent);
+
+    if (inBoundary) {
+        obj_impl_ptr(Node, parent)->addBoundaryPin(impl);
+    } else {
+        obj_impl_ptr(Node, parent)->addInternalPin(impl);
+    }
+    return (Pin*)impl;
+}
+
+Pin* PinImpl::New(Symbol* parent, const QString& name)
+{
+    if (parent == nullptr) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PinImpl* impl = new PinImpl(name, (Object*)parent);
+    obj_impl_ptr(Symbol, parent)->addPin(impl);
+    return (Pin*)impl;
+}
+
+PinImpl::PinImpl(const QString& name, Object* parent) : GraphElementImpl(parent)
+{
+    // 创建一个名字label
+    LabelImpl* label = new LabelImpl((Object*)this);
+    label->setText(name);
+    addLabel(label);
+}
+
+bool PinImpl::isTypeOf(const ObjectType& type) const
+{
+    auto typeId = type.getType();
+    if (typeId == ObjectType::kObject ||
+        typeId == ObjectType::kGObject ||
+        typeId == ObjectType::kGraphElement ||
+        typeId == ObjectType::kPin) {
+        return true;
+    }
+    return false;
+}
+
+void PinImpl::Delete()
+{
+
+}
+
+QRectF PinImpl::getBoundingRect() const
+{
+    return getBoundingRect();
+}
+
+void PinImpl::setName(const QString& name)
+{
+    auto nameLabel = GraphElementImpl::findMainName(this);
+    if (nameLabel) {
+        nameLabel->setText(name);
+    }
+}
+
+QString PinImpl::getName() const
+{
+    auto nameLabel = GraphElementImpl::findMainName(this);
+    if (nameLabel) {
+        return nameLabel->getText();
+    }
+    return "";
+}

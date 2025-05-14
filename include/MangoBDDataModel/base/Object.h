@@ -43,7 +43,7 @@ public:
     bool isAlive();
 
     /// 删除对象
-    void destory();
+    void Delete();
 
     /// 获取父对象
     /// @return 父对象指针

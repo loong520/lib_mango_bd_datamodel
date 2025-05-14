@@ -25,7 +25,7 @@ public:
 
     virtual bool isTypeOf(const ObjectType& type) const;
 
-    virtual void destory();
+    virtual void Delete();
 
     DBID getDbid() const;
 

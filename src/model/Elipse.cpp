@@ -3,6 +3,11 @@
 //
 
 #include "Elipse.h"
-#include "impl/ElipseImpl.h"
+#include "ElipseImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
+
+Elipse* Elipse::New(Shape* parent)
+{
+    return ElipseImpl::New(parent);
+}

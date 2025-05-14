@@ -3,5 +3,46 @@
 //
 
 #include "ArcImpl.h"
+#include "ShapeImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
+
+Arc* ArcImpl::New(Shape* parent)
+{
+    if (!parent) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    ArcImpl* impl = new ArcImpl((Object*)parent);
+
+    obj_impl_ptr(Shape, parent)->addSubShape((GObjectImpl*)impl);
+
+    return (Arc*)impl;
+}
+
+bool ArcImpl::isTypeOf(const ObjectType& type) const
+{
+    auto typeId = type.getType();
+    if (typeId == ObjectType::kObject ||
+        typeId == ObjectType::kGObject ||
+        typeId == ObjectType::kArc) {
+        return true;
+    }
+    return false;
+}
+
+void ArcImpl::Delete()
+{
+    if (!m_parent) {
+        // TODO: LOG_ERROR
+        return;
+    }
+
+    ObjectType::TypeId typeId = m_parent->getObjectType();
+    if (typeId == ObjectType::kShape) {
+        obj_impl_ptr(Shape, m_parent)->removeSubShape((GObjectImpl*)this);
+    } else {
+        // TODO: LOG_ERROR
+        return;
+    }
+}

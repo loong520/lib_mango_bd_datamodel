@@ -5,7 +5,6 @@
 
 #include <QHash>
 
-using namespace mango::blockdiagram;
 using namespace mango::blockdiagram::datamodel;
 
 namespace
@@ -108,7 +107,17 @@ bool ObjectType::operator==(ObjectType::TypeId right) const
     return this->m_type == right;
 }
 
+bool ObjectType::operator!=(ObjectType::TypeId right) const
+{
+    return this->m_type != right;
+}
+
 bool ObjectType::operator==(const ObjectType &right) const
 {
     return this->m_type == right.m_type;
+}
+
+bool ObjectType::operator!=(const ObjectType &right) const
+{
+    return this->m_type != right.m_type;
 }

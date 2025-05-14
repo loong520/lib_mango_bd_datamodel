@@ -20,9 +20,12 @@ add_definitions(-DMANGO_BD_DATAMODEL_EXPORTS)
 
 # 引入本项目的头文件目录
 include_directories(include)
-include_directories(include/base)
-include_directories(include/base/impl)
-include_directories(include/model)
+include_directories(include/MangoBDDataModel/base)
+include_directories(include/MangoBDDataModel/model)
+include_directories(include/MangoBDDataModel/style)
+include_directories(src/base/impl)
+include_directories(src/model/impl)
+include_directories(src/style/impl)
 
 # 引入本项目的源文件目录
 aux_source_directory(src DIR_SRC)
