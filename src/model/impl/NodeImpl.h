@@ -29,6 +29,7 @@ public:
     void initNodeSize();
 
     bool isRootNode() const { return getParent() == nullptr; }
+    bool isHierarchical() const { return m_subNodes.size() > 0; }
 
     QSize getSize() const;
     void setSize(const QSize &size);

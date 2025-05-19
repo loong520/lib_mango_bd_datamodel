@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "ObjectType.h"
+#include "MangoBDDataModel/base/ObjectType.h"
 
 namespace mango {
 namespace blockdiagram {

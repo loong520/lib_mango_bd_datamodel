@@ -24,6 +24,7 @@ public:
     ObjectType getObjectType() const override { return ObjectType::kRectangle; }
     bool isTypeOf(const ObjectType& type) const override;
     void Delete() override;
+    QRectF getBoundingRect() const override;
 
     void setTopLeft(const QPointF& topLeft);
     QPointF getTopLeft() const;
@@ -38,9 +39,9 @@ public:
     QSize getSize() const;
 
 public:
-    QPointF m_topLeft;
-    double  m_width;
-    double  m_height;
+    QPointF m_topLeft = {0, 0};
+    double  m_width = 0;
+    double  m_height = 0;
 };
 
 }

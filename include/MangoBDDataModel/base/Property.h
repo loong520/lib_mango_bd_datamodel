@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "Object.h"
-#include "PropertyDef.h"
+#include "MangoBDDataModel/base/Object.h"
+#include "MangoBDDataModel/base/PropertyDef.h"
 
 namespace mango {
 namespace blockdiagram {

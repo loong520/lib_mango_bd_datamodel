@@ -3,7 +3,6 @@
 //
 
 #include "LabelImpl.h"
-#include "Label.h"
 
 using namespace mango::blockdiagram::datamodel;
 

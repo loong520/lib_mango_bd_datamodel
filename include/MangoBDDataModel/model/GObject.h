@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Object.h"
+#include "MangoBDDataModel/base/Object.h"
 
 namespace mango {
 namespace blockdiagram {
@@ -83,6 +83,23 @@ public:
     /// @param pos 位置
     void setPos(const QPointF& pos);
 
+    /// 移动
+    /// @param offset 偏移量
+    void translate(const QPointF& offset);
+
+    /// 移动
+    /// @param dx x轴偏移量
+    /// @param dy y轴偏移量
+    void translate(double dx, double dy);
+
+    /// 设置缩放比例
+    /// @param scale 缩放比例
+    void setScale(double scale);
+
+    /// 获取缩放比例
+    /// @return 缩放比例
+    double getScale() const;
+
     /// 获取旋转角度
     /// @return 旋转角度
     int getRotation() const;
@@ -102,9 +119,13 @@ public:
     /// y轴镜像
     void mirrorY();
 
-    /// 移动
-    /// @param offset 偏移量
-    void translate(const QPointF& offset);
+    /// 获取变换矩阵
+    /// @return 变换矩阵
+    QTransform getTransform() const;
+
+    /// 叠加变化矩阵
+    /// @param other 变换矩阵
+    void concat(const QTransform& other);
 
     /// 获取z值
     /// @return z值
@@ -113,6 +134,27 @@ public:
     /// 设置z值
     /// @param zValue z值
     void setZValue(int zValue);
+
+    /// 测试点是否在图形内
+    /// @param aPosition 点
+    /// @param aAccuracy 精度(GObject的boundingRect基础上外扩或者内缩)
+    /// @return 如果点在图形内，则返回true，否则返回false
+    bool hitTest(const QPointF& aPosition, int aAccuracy = 0) const;
+
+    /// 测试矩形是否在图形内
+    /// @param aRect 矩形
+    /// @param aContained 是否包含
+    /// @param aAccuracy 精度（aRect基础上外扩或者内缩）
+    /// @return 如果矩形在图形内，则返回true，否则返回false
+    bool hitTest(const QRectF& aRect, bool aContained, int aAccuracy = 0) const;
+
+    /// 获取边框宽度
+    /// @return 边框宽度
+    int getBorderWidth() const;
+
+    /// 设置边框宽度
+    /// @param width 边框宽度
+    void setBorderWidth(int width);
 
 };
 

@@ -2,15 +2,25 @@
 // Created by 18224 on 2025/5/7.
 //
 
-#include "GraphElement.h"
-#include "GraphElementImpl.h"
-#include "LabelImpl.h"
+#include "MangoBDDataModel/model/GraphElement.h"
+#include "impl/GraphElementImpl.h"
+#include "impl/LabelImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 
 GraphElement* GraphElement::New(Node* parent)
 {
     return GraphElementImpl::New(parent);
+}
+
+void GraphElement::setName(const QString& name)
+{
+    impl_ptr(GraphElement)->setName(name);
+}
+
+QString GraphElement::getName() const
+{
+    return impl_ptr(GraphElement)->getName();
 }
 
 void GraphElement::setShape(Shape *shape)

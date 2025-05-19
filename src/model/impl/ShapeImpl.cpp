@@ -4,7 +4,6 @@
 
 #include "ShapeImpl.h"
 #include "GraphElementImpl.h"
-#include "Rectangle.h"
 
 using namespace mango::blockdiagram::datamodel;
 
@@ -41,6 +40,18 @@ void ShapeImpl::Delete()
     if (typeId == ObjectType::kShape) {
         obj_impl_ptr(Shape, m_parent)->removeSubShape((GObjectImpl*)this);
     }
+}
+
+
+QRectF ShapeImpl::getBoundingRect() const
+{
+    QRectF bounds;
+    for (auto shape : m_subShapes) {
+        auto subRect = shape->getBoundingRect();
+        subRect = m_transform.mapRect(subRect);
+        bounds = bounds.united(subRect);
+    }
+    return bounds;
 }
 
 void ShapeImpl::addSubShape(GObjectImpl *shape)

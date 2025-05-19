@@ -24,6 +24,7 @@ public:
     ObjectType getObjectType() const override { return ObjectType::kPolyline; }
     bool isTypeOf(const ObjectType& type) const override;
     void Delete() override;
+    QRectF getBoundingRect() const override;
 
 public:
     QList<QPointF> m_points;

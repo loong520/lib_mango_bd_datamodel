@@ -5,7 +5,6 @@
 #include "NodeImpl.h"
 #include "ShapeImpl.h"
 #include "RectangleImpl.h"
-#include "Rectangle.h"
 #include "PinImpl.h"
 #include "NetImpl.h"
 
@@ -16,7 +15,7 @@ Node* NodeImpl::New(Node *parent)
     NodeImpl* impl = new NodeImpl((Object*)parent);
     if (parent) {
         impl->initNodeSize();
-        obj_impl_ptr(Node, parent)->addGraphElement((GraphElementImpl*)impl);
+        obj_impl_ptr(Node, parent)->addSubNode(impl);
     }
     return (Node*)impl;
 }
@@ -83,11 +82,11 @@ void NodeImpl::initNodeSize()
 
     for (auto subShape : m_shape->getSubShapes()) {
         if (subShape->getObjectType() == ObjectType::kRectangle) {
-            ((Rectangle*)subShape)->setSize(QSize(defaultWidth, defaultHeight));
+            ((RectangleImpl*)subShape)->setSize(QSize(defaultWidth, defaultHeight));
             return;
         }
     }
-    Rectangle* rect = RectangleImpl::New((Shape*)m_shape);
+    RectangleImpl* rect = (RectangleImpl*)RectangleImpl::New((Shape*)m_shape);
     rect->setWidth(defaultWidth);
     rect->setHeight(defaultHeight);
 
@@ -103,7 +102,7 @@ QSize NodeImpl::getSize() const
     if (parentType == ObjectType::kNode) {
         for (auto subShape : m_shape->getSubShapes()) {
             if (subShape->isTypeOf(ObjectType::kRectangle)) {
-                return ((Rectangle*)subShape)->getSize();
+                return ((RectangleImpl*)subShape)->getSize();
             }
         }
     }
@@ -121,7 +120,7 @@ void NodeImpl::setSize(const QSize &size)
     if (parentType == ObjectType::kNode) {
         for (auto subShape : m_shape->getSubShapes()) {
             if (subShape->getObjectType() == ObjectType::kRectangle) {
-                ((Rectangle*)subShape)->setSize(size);
+                ((RectangleImpl*)subShape)->setSize(size);
                 return;
             }
         }

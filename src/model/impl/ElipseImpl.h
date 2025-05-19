@@ -24,6 +24,24 @@ public:
     ObjectType getObjectType() const override { return ObjectType::kElipse; }
     bool isTypeOf(const ObjectType &type) const override;
     void Delete() override;
+    QRectF getBoundingRect() const override;
+
+    // 圆心
+    void setCenter(const QPointF& center);
+    QPointF getCenter() const;
+
+    // x半径
+    void setRadiusX(double radiusX);
+    double getRadiusX() const;
+
+    // y半径
+    void setRadiusY(double radiusY);
+    double getRadiusY() const;
+
+public:
+    QPointF m_center = {0, 0};  // 圆心坐标(相对于pos的相对坐标，默认把pos作为原点)
+    double m_radiusX = 0;       // 半径x
+    double m_radiusY = 0;       // 半径y
 };
 
 }

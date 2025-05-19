@@ -4,7 +4,7 @@
 
 #include "ObjectImpl.h"
 #include "PropertyImpl.h"
-#include "PropertyDef.h"
+#include "MangoBDDataModel/base/PropertyDef.h"
 
 using namespace mango::blockdiagram::datamodel;
 

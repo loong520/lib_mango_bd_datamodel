@@ -2,8 +2,8 @@
 // Created by 18224 on 2025/5/7.
 //
 
-#include "Polygon.h"
-#include "PolygonImpl.h"
+#include "MangoBDDataModel/model/Polygon.h"
+#include "impl/PolygonImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "GraphElement.h"
+#include "MangoBDDataModel/model/GraphElement.h"
 
 namespace mango {
 namespace blockdiagram {
@@ -12,13 +12,14 @@ namespace datamodel {
 
 class Node;
 class Symbol;
+class Net;
 
 class MANGO_BD_DATAMODEL_API Pin : public GraphElement {
 public:
     /// 创建一个新的引脚对象
     /// \param parent 父节点
     /// \param name 引脚名称
-    /// \param inBoundary 是否在边界上
+    /// \param inBoundary 是否在边界上(false: 视作模块端口)
     static Pin* New(Node* parent, const QString& name, bool inBoundary);
 
     /// 创建一个新的引脚对象
@@ -34,7 +35,45 @@ public:
     /// \return 引脚名称
     QString getName() const;
 
+    /// 添加一个输入的连线
+    /// \param net 输入的连线
+    void addIncomingNet(Net* net);
 
+    /// 删除一个输入的连线
+    /// \param net 输入的连线
+    void removeIncomingNet(Net* net);
+
+    /// 获取所有输入的连线
+    /// \return 输入的连线列表
+    QList<Net*> getIncomingNets() const;
+
+    /// 添加一个输出的连线
+    /// \param net 输出的连线
+    void addOutgoingNet(Net* net);
+
+    /// 删除一个输出的连线
+    /// \param net 输出的连线
+    void removeOutgoingNet(Net* net);
+
+    /// 获取所有输出的连线
+    /// \return 输出的连线列表
+    QList<Net*> getOutgoingNets() const;
+
+    /// 设置引脚形状类型
+    /// \param shapeType 形状类型
+    void setShapeType(PinShape shapeType);
+
+    /// 获取引脚形状类型
+    /// \return 形状类型
+    PinShape getShapeType() const;
+
+    /// 设置引脚方向
+    /// \param direction 方向
+    void setDirection(Direction direction);
+
+    /// 获取引脚方向
+    /// \return 方向
+    Direction getDirection() const;
 };
 
 }

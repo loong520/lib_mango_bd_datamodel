@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Property.h"
+#include "MangoBDDataModel/base/Property.h"
 #include "ObjectImpl.h"
 
 namespace mango {

@@ -2,9 +2,9 @@
 // Created by 18224 on 2025/5/7.
 //
 
-#include "Symbol.h"
-#include "SymbolImpl.h"
-#include "PinImpl.h"
+#include "MangoBDDataModel/model/Symbol.h"
+#include "impl/SymbolImpl.h"
+#include "impl/PinImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 

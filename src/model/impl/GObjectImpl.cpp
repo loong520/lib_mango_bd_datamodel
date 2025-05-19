@@ -3,7 +3,6 @@
 //
 
 #include "GObjectImpl.h"
-#include "GObject.h"
 
 using namespace mango::blockdiagram::datamodel;
 
@@ -132,32 +131,58 @@ QPointF GObjectImpl::getPos() const
 
 void GObjectImpl::translate(const QPointF& offset)
 {
-    m_pos += offset;
+    m_transform.translate(offset.x(), offset.y());
+}
+
+void GObjectImpl::setScale(double scale)
+{
+    m_transform.scale(scale, scale);
+}
+
+double GObjectImpl::getScale() const
+{
+    return m_transform.m11();
 }
 
 void GObjectImpl::setRotation(int angle)
 {
-    m_rotation = angle;
+    m_transform.rotate(angle);
 }
 
 void GObjectImpl::setRotation(QPointF center, int angle)
 {
-    // TODO: implement
+    // 将变换复合为：平移到中心 -> 旋转 -> 平移回来
+    QTransform t;
+    t.translate(center.x(), center.y());
+    t.rotate(angle);
+    t.translate(-center.x(), -center.y());
+    m_transform *= t;
 }
 
 int GObjectImpl::getRotation() const
 {
-    return m_rotation;
+    return 0;
+    // TODO: implement
 }
 
 void GObjectImpl::mirrorX()
 {
-    // TODO: implement
+    m_transform.scale(-1, 1);
 }
 
  void GObjectImpl::mirrorY()
 {
-    // TODO: implement
+    m_transform.scale(1, -1);
+}
+
+QTransform GObjectImpl::getTransform() const
+{
+    return m_transform;
+}
+
+void GObjectImpl::concat(const QTransform& other)
+{
+    m_transform = other * m_transform;
 }
 
 int GObjectImpl::getZValue() const
@@ -168,4 +193,28 @@ int GObjectImpl::getZValue() const
 void GObjectImpl::setZValue(int zValue)
 {
     m_zValue = zValue;
+}
+
+bool GObjectImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
+{
+    double maxdist = aAccuracy;
+    if( getBorderWidth() > 0 ) {
+        maxdist += getBorderWidth() / 2.0;
+    }
+
+    return false;
+}
+bool GObjectImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
+{
+    return false;
+}
+
+int GObjectImpl::getBorderWidth() const
+{
+    return 1;
+}
+
+void GObjectImpl::setBorderWidth(int width)
+{
+    // todo: implement
 }

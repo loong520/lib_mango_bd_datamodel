@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "GraphElement.h"
+#include "MangoBDDataModel/model/GraphElement.h"
 
 namespace mango {
 namespace blockdiagram {

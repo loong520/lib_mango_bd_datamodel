@@ -20,6 +20,11 @@ public:
 
     SymbolImpl(Object* parent = nullptr);
 
+    ObjectType getObjectType() const override { return ObjectType::kSymbol; }
+    bool isTypeOf(const ObjectType& type) const override;
+    void Delete() override;
+    QRectF getBoundingRect() const override;
+
     void addPin(PinImpl* pin);
     void removePin(PinImpl* pin);
     QList<PinImpl*> getPins() const;

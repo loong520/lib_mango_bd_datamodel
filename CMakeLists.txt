@@ -10,7 +10,7 @@ project(mangobddatamodel
 include($ENV{CBB_HOME}/cmake_modules/Common.cmake)
 
 # 初始化Qt5工程.
-use_qt5(Core)
+use_qt5(Core Gui)
 
 # 生成库的链接名称(LINK_NAME)
 gen_link_name_for_lib()
@@ -20,12 +20,6 @@ add_definitions(-DMANGO_BD_DATAMODEL_EXPORTS)
 
 # 引入本项目的头文件目录
 include_directories(include)
-include_directories(include/MangoBDDataModel/base)
-include_directories(include/MangoBDDataModel/model)
-include_directories(include/MangoBDDataModel/style)
-include_directories(src/base/impl)
-include_directories(src/model/impl)
-include_directories(src/style/impl)
 
 # 引入本项目的源文件目录
 aux_source_directory(src DIR_SRC)

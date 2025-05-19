@@ -2,8 +2,8 @@
 // Created by 18224 on 2025/5/7.
 //
 
-#include "Property.h"
-#include "PropertyImpl.h"
+#include "MangoBDDataModel/base/Property.h"
+#include "impl/PropertyImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 

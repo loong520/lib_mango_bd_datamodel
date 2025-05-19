@@ -82,3 +82,77 @@ QString PinImpl::getName() const
     }
     return "";
 }
+
+void PinImpl::addIncomingNet(NetImpl* net)
+{
+    if (net == nullptr) {
+        // TODO: LOG_WARN
+        return;
+    }
+    if (getIncomingNets().contains(net)) {
+        return;
+    }
+    m_incomingNets.append(net);
+}
+
+void PinImpl::removeIncomingNet(NetImpl* net)
+{
+    if (net == nullptr) {
+        // TODO: LOG_WARN
+        return;
+    }
+    m_incomingNets.removeAll(net);
+}
+
+QList<NetImpl*> PinImpl::getIncomingNets() const
+{
+    return m_incomingNets;
+}
+
+void PinImpl::addOutgoingNet(NetImpl* net)
+{
+    if (net == nullptr) {
+        // TODO: LOG_WARN
+        return;
+    }
+    if (getOutgoingNets().contains(net)) {
+        return;
+    }
+    m_outgoingNets.append(net);
+}
+
+void PinImpl::removeOutgoingNet(NetImpl* net)
+{
+    if (net == nullptr) {
+        // TODO: LOG_WARN
+        return;
+    }
+    m_outgoingNets.removeAll(net);
+}
+
+QList<NetImpl*> PinImpl::getOutgoingNets() const
+{
+    return m_outgoingNets;
+}
+
+void PinImpl::setShapeType(PinShape shapeType)
+{
+    m_shapeType = shapeType;
+
+    // todo: 更新shape数据
+}
+
+PinShape PinImpl::getShapeType() const
+{
+    return m_shapeType;
+}
+
+void PinImpl::setDirection(Direction direction)
+{
+    m_direction = direction;
+}
+
+Direction PinImpl::getDirection() const
+{
+    return m_direction;
+}

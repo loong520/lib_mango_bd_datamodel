@@ -8,7 +8,7 @@
 #include <QPointF>
 #include <QRectF>
 
-#include "Config.h"
+#include "MangoBDDataModel/base/Config.h"
 
 namespace mango {
 namespace blockdiagram {
@@ -54,7 +54,7 @@ public:
 
     /// 获取对象类型名称
     /// @return 类型名称
-    const QString& getName() const;
+    const QString getName() const;
 
     /// 获取对象类型ID
     /// @return 类型ID
@@ -107,6 +107,29 @@ enum MANGO_BD_DATAMODEL_API ConnectMode {
     ConnectModeFly = 0, // 飞线
     ConnectModeNamed,   // 命名连线
     ConnectModeDirect,  // 直接连线
+};
+
+enum MANGO_BD_DATAMODEL_API Direction {
+    Bottom = 0,
+    Top = 1,
+    Left = 2,
+    Right = 3,
+    Middle = 4,
+};
+
+enum MANGO_BD_DATAMODEL_API PinShape {
+    Line = 0,
+    Inverted,
+    Clock,
+    InvertedClock,
+    InputLow,
+    ClockLow,
+    OutputLow,
+    FallingEdgeClock,
+    NonLogic,
+
+    LastOption = NonLogic, ///< this is the sentinel value, must be set to last enum value
+    Inherit
 };
 
 } // end of namespace datamodel

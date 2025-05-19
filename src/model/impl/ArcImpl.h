@@ -24,6 +24,25 @@ public:
     ObjectType getObjectType() const override { return ObjectType::kArc; }
     bool isTypeOf(const ObjectType& type) const override;
     void Delete() override;
+    QRectF getBoundingRect() const override;
+
+    void setCenter(const QPointF center);
+    QPointF getCenter() const;
+
+    void setRadius(double radius);
+    double getRadius() const;
+
+    void setStartAngle(double startAngle);
+    double getStartAngle() const;
+
+    void setSpanAngle(double spanAngle);
+    double getSpanAngle() const;
+
+public:
+    QPointF m_center = {0, 0};  // 圆心坐标(相对于pos的相对坐标，默认把pos作为原点)
+    double m_radius = 0;        // 半径
+    double m_startAngle = 0;    // 起始角度
+    double m_spanAngle = 0;     // 角度
 };
 
 }

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "GObject.h"
+#include "MangoBDDataModel/model/GObject.h"
 
 namespace mango {
 namespace blockdiagram {
@@ -17,6 +17,14 @@ class Node;
 class MANGO_BD_DATAMODEL_API GraphElement : public GObject {
 public:
     static GraphElement* New(Node* parent);
+
+    /// 设置名称
+    /// \param name 名称
+    void setName(const QString& name);
+
+    /// 获取名称
+    /// \return 名称
+    QString getName() const;
 
     /// 设置形状
     /// \param shape 形状指针

@@ -24,8 +24,11 @@ public:
     ObjectType getObjectType() const override { return ObjectType::kGraphElement; }
     bool isTypeOf(const ObjectType& type) const override;
     void Delete() override;
-
     QRectF getBoundingRect() const override;
+
+    // 名字
+    void setName(const QString& name);
+    QString getName() const;
 
     // 形状
     void setShape(ShapeImpl *shape);

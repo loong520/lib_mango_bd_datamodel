@@ -1,7 +1,7 @@
 //
 // Created by 18224 on 2025/5/7.
 //
-#include "ObjectType.h"
+#include "MangoBDDataModel/base/ObjectType.h"
 
 #include <QHash>
 
@@ -9,45 +9,51 @@ using namespace mango::blockdiagram::datamodel;
 
 namespace
 {
-const QString kNames[] = {
-    "GObject",
-    "GObject",
-    "Unknown"
-    "Object"
-    "GObject"
-    "Rectangle"
-    "Elipse"
-    "Polygon"
-    "Polyline"
-    "Arc"
-    "Shape"
-    "GraphElement"
-    "Label"
-    "Node"
-    "Pin"
-    "CompositePin"
-    "Symbol"
-    "Net"
-    "EdgeSection"
-    "RTree"
-    "Style"
-    "Theme"
-    "StyleManager"
-    "kMaxObjectTypes"
-};
-QHash<QString, quint16> kNameToType;
 
-class NameToTypeInitializer {
-public:
-    NameToTypeInitializer()
-    {
-        for (quint16 i = 0; i < ObjectType::kMaxObjectTypes; ++i) {
-            kNameToType[kNames[i]] = i;
-        }
-    }
-};
+// 定义映射宏
+#define TYPEID_MAP(XX) \
+    XX(kUnknown, "Unknown") \
+    XX(kObject, "Object") \
+    XX(kGObject, "GObject") \
+    XX(kRectangle, "Rectangle") \
+    XX(kElipse, "Elipse")   \
+    XX(kPolygon, "Polygon") \
+    XX(kPolyline, "Polyline") \
+    XX(kArc, "Arc") \
+    XX(kShape, "Shape") \
+    XX(kGraphElement, "GraphElement") \
+    XX(kLabel, "Label") \
+    XX(kNode, "Node") \
+    XX(kPin, "Pin") \
+    XX(kCompositePin, "CompositePin") \
+    XX(kSymbol, "Symbol") \
+    XX(kNet, "Net") \
+    XX(kEdgeSection, "EdgeSection") \
+    XX(kRTree, "RTree") \
+    XX(kStyle, "Style") \
+    XX(kTheme, "Theme") \
+    XX(kStyleManager, "StyleManager") \
+    XX(kMaxObjectTypes, "kMaxObjectTypes")
 
-const static NameToTypeInitializer kNameToTypeInitializer;
+// 生成枚举到字符串的映射
+QHash<ObjectType::TypeId, QString> createType2StringMap()
+{
+    QHash<ObjectType::TypeId, QString> map;
+#define XX(id, name) map[ObjectType::id] = name;
+    TYPEID_MAP(XX)
+#undef XX
+    return map;
+}
+
+// 生成字符串到枚举的映射
+QHash<QString,ObjectType::TypeId> createString2TypeMap()
+{
+    QHash<QString, ObjectType::TypeId> map;
+#define XX(id, name) map[name] = ObjectType::id;
+    TYPEID_MAP(XX)
+#undef XX
+    return map;
+}
 
 }
 
@@ -56,8 +62,7 @@ ObjectType::ObjectType()
 {
 }
 
-ObjectType::ObjectType(ObjectType::TypeId type)
-    : m_type(type)
+ObjectType::ObjectType(ObjectType::TypeId type) : m_type(type)
 {
     if (type < kUnknown || type >= kMaxObjectTypes) {
         m_type = kUnknown;
@@ -66,20 +71,14 @@ ObjectType::ObjectType(ObjectType::TypeId type)
 
 ObjectType::ObjectType(const QString &typeName)
 {
-    auto it = kNameToType.find(typeName);
-    if (it != kNameToType.end() && it.key() == typeName) {
-        m_type = (TypeId)it.value();
-    } else {
-        m_type = kUnknown;
-    }
+    static const QHash<QString,ObjectType::TypeId> stringToType = createString2TypeMap();
+    m_type = stringToType.value(typeName, kUnknown);
 }
 
-const QString &ObjectType::getName() const
+const QString ObjectType::getName() const
 {
-    if (m_type >= 0 && m_type < kMaxObjectTypes) {
-        return kNames[m_type];
-    }
-    return kNames[kUnknown];
+    static const QHash<ObjectType::TypeId, QString> type2StringMap = createType2StringMap();
+    return type2StringMap.value(m_type, type2StringMap[kUnknown]);
 }
 
 ObjectType::TypeId ObjectType::getType() const

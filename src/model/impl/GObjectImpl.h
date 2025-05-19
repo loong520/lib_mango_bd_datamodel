@@ -4,7 +4,8 @@
 
 #pragma once
 
-#include "ObjectImpl.h"
+#include "../../base/impl/ObjectImpl.h"
+#include <QTransform>
 
 namespace mango {
 namespace blockdiagram {
@@ -49,25 +50,37 @@ public:
 
     // 移动
     void translate(const QPointF& offset);
-
+    // 缩放
+    void setScale(double scale);
+    double getScale() const;
     // 旋转角度
-    virtual void setRotation(int angle);
-    virtual void setRotation(QPointF center, int angle);
-    virtual int getRotation() const;
-
+    void setRotation(int angle);
+    void setRotation(QPointF center, int angle);
+    int getRotation() const;
     // 镜像
-    virtual void mirrorX();
-    virtual void mirrorY();
+    void mirrorX();
+    void mirrorY();
+    // 矩阵变换
+    QTransform getTransform() const;
+    void concat(const QTransform& other);
 
     // z值
     int getZValue() const;
     void setZValue(int zValue);
 
+    // 碰撞检测
+    virtual bool hitTest(const QPointF &aPosition, int aAccuracy = 0) const;
+    virtual bool hitTest(const QRectF &aRect, bool aContained, int aAccuracy = 0) const;
+
+    // 边框宽度
+    virtual int getBorderWidth() const;
+    virtual void setBorderWidth(int width);
+
 public:
     quint32 m_flags = 0;
-    int     m_rotation = 0;
     int     m_zValue = 0;
     QPointF m_pos;
+    QTransform m_transform;
 };
 
 }

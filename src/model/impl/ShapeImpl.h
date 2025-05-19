@@ -24,6 +24,7 @@ public:
     ObjectType getObjectType() const override { return ObjectType::kShape; }
     bool isTypeOf(const ObjectType& type) const override;
     void Delete() override;
+    QRectF getBoundingRect() const override;
 
     void addSubShape(GObjectImpl *shape);
     void removeSubShape(GObjectImpl *shape);

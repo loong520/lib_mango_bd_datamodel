@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "GObject.h"
+#include "MangoBDDataModel/model/GObject.h"
 
 namespace mango {
 namespace blockdiagram {

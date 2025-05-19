@@ -47,6 +47,11 @@ void RectangleImpl::Delete()
     }
 }
 
+QRectF RectangleImpl::getBoundingRect() const
+{
+    return QRectF(m_topLeft, QSizeF(m_width, m_height));
+}
+
 void RectangleImpl::setTopLeft(const QPointF& topLeft)
 {
     m_topLeft = topLeft;

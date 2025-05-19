@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "GraphElement.h"
+#include "MangoBDDataModel/model/GraphElement.h"
 
 namespace mango {
 namespace blockdiagram {
@@ -33,6 +33,10 @@ public:
     /// \return 是否为根节点
     bool isRootNode() const;
 
+    /// 是否为层次节点
+    /// \return 是否为层次节点
+    bool isHierarchical() const;
+
     /// 增加子图元
     /// \param graphElement 子图元
     void addGraphElement(GraphElement *graphElement);
@@ -43,6 +47,11 @@ public:
 
     /// 获取子图元
     QList<GraphElement*> getGraphElements() const;
+
+    /// 获取子图元
+    /// \param type 子图元类型
+    /// \return 子图元列表
+    QList<GraphElement*> getGraphElements(ObjectType type) const;
 
     /// 增加子节点
     /// \param node 子节点
@@ -91,6 +100,12 @@ public:
     /// 获取网络
     /// \return 网络列表
     QList<Net*> getNets() const;
+
+
+//    QList<GObject *> items(const QPointF &pos, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape, Qt::SortOrder order = Qt::DescendingOrder) const;
+//    QList<GObject *> items(const QRectF &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape, Qt::SortOrder order = Qt::DescendingOrder) const;
+//    QList<GObject *> items(const QPainterPath &path, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape, Qt::SortOrder order = Qt::DescendingOrder) const;
+
 };
 
 }

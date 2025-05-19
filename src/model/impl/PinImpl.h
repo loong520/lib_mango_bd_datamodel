@@ -13,6 +13,8 @@ namespace datamodel {
 class Pin;
 class Node;
 class Symbol;
+class NetImpl;
+class CompositePin;
 
 class PinImpl : public GraphElementImpl {
 public:
@@ -28,6 +30,33 @@ public:
 
     void setName(const QString& name);
     QString getName() const;
+
+    // 传入的连线
+    void addIncomingNet(NetImpl* net);
+    void removeIncomingNet(NetImpl* net);
+    QList<NetImpl*> getIncomingNets() const;
+
+    // 输出的连线
+    void addOutgoingNet(NetImpl* net);
+    void removeOutgoingNet(NetImpl* net);
+    QList<NetImpl*> getOutgoingNets() const;
+
+    // 形状
+    void setShapeType(PinShape shapeType);
+    PinShape getShapeType() const;
+
+    // 方向
+    void setDirection(Direction direction);
+    Direction getDirection() const;
+
+public:
+    QList<NetImpl*> m_incomingNets;
+    QList<NetImpl*> m_outgoingNets;
+
+    PinShape m_shapeType = Line;
+    Direction m_direction = Left;
+
+    CompositePin* m_compositePin = nullptr;
 };
 
 }

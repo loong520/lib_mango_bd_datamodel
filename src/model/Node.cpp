@@ -2,9 +2,9 @@
 // Created by 18224 on 2025/5/7.
 //
 
-#include "Node.h"
-#include "NodeImpl.h"
-#include "PinImpl.h"
+#include "MangoBDDataModel/model/Node.h"
+#include "impl/NodeImpl.h"
+#include "impl/PinImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 
@@ -28,6 +28,11 @@ bool Node::isRootNode() const
     return impl_ptr(Node)->isRootNode();
 }
 
+bool Node::isHierarchical() const
+{
+    return impl_ptr(Node)->isHierarchical();
+}
+
 void Node::addGraphElement(GraphElement *graphElement)
 {
     impl_ptr(Node)->addGraphElement((GraphElementImpl*)graphElement);
@@ -43,6 +48,17 @@ QList<GraphElement*> Node::getGraphElements() const
     QList<GraphElement*> elements;
     for (auto element : impl_ptr(Node)->getGraphElements()) {
         elements.append((GraphElement*)element);
+    }
+    return elements;
+}
+
+QList<GraphElement*> Node::getGraphElements(ObjectType type) const
+{
+    QList<GraphElement*> elements;
+    for (auto element : impl_ptr(Node)->getGraphElements()) {
+        if (element->isTypeOf(type)) {
+            elements.append((GraphElement*)element);
+        }
     }
     return elements;
 }

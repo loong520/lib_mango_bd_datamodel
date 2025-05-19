@@ -5,6 +5,7 @@
 #include "SymbolImpl.h"
 #include "NodeImpl.h"
 #include "PinImpl.h"
+#include "ShapeImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 
@@ -22,6 +23,45 @@ Symbol *SymbolImpl::New(Node *parent)
 SymbolImpl::SymbolImpl(Object* parent) : GraphElementImpl(parent)
 {
 
+}
+
+bool SymbolImpl::isTypeOf(const ObjectType& type) const
+{
+    auto typeId = type.getType();
+    if (typeId == ObjectType::kObject ||
+        typeId == ObjectType::kGObject ||
+        typeId == ObjectType::kSymbol) {
+        return true;
+    }
+    return false;
+}
+
+void SymbolImpl::Delete()
+{
+    if (!m_parent) {
+        // TODO: LOG_ERROR
+        return;
+    }
+    ObjectType::TypeId typeId = m_parent->getObjectType();
+    if (typeId == ObjectType::kNode) {
+        obj_impl_ptr(Node, m_parent)->removeGraphElement((SymbolImpl*)this);
+    }
+}
+
+QRectF SymbolImpl::getBoundingRect() const
+{
+    QRectF bounds;
+    if (m_shape) {
+        auto shapeRect = m_shape->getBoundingRect();
+        shapeRect = m_transform.mapRect(shapeRect);
+        bounds = bounds.united(shapeRect);
+    }
+    for (auto pin : m_pins) {
+        auto pinRect = pin->getBoundingRect();
+        pinRect = m_transform.mapRect(pinRect);
+        bounds = bounds.united(pinRect);
+    }
+    return bounds;
 }
 
 void SymbolImpl::addPin(PinImpl* pin)

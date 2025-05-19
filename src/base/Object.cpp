@@ -2,8 +2,8 @@
 // Created by 18224 on 2025/5/7.
 //
 
-#include "Object.h"
-#include "ObjectImpl.h"
+#include "MangoBDDataModel/base/Object.h"
+#include "impl/ObjectImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 

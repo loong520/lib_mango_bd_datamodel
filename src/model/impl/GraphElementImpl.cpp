@@ -57,13 +57,42 @@ QRectF GraphElementImpl::getBoundingRect() const
     QRectF rect;
     if (m_shape) {
         auto shapeRect = m_shape->getBoundingRect();
+        shapeRect = m_transform.mapRect(shapeRect);
         rect = rect.united(shapeRect);
     }
     for (auto label : m_labels) {
         auto labelRect = label->getBoundingRect();
+        labelRect = m_transform.mapRect(labelRect);
         rect = rect.united(labelRect);
     }
     return rect;
+}
+
+void GraphElementImpl::setName(const QString& name)
+{
+    for (auto label : m_labels) {
+        if (label->getType() == LabelType::LabelForMainName) {
+            label->setText(name);
+            return;
+        }
+    }
+
+    // create a new label for main name
+    LabelImpl* label = (LabelImpl*)LabelImpl::New((GraphElement*)this);
+    label->setType(LabelType::LabelForMainName);
+    label->setText(name);
+
+    addLabel((LabelImpl*)label);
+}
+
+QString GraphElementImpl::getName() const
+{
+    for (auto label : m_labels) {
+        if (label->getType() == LabelType::LabelForMainName) {
+            return label->getText();
+        }
+    }
+    return QString();
 }
 
 void GraphElementImpl::setShape(ShapeImpl *shape)

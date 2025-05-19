@@ -46,3 +46,17 @@ void PolygonImpl::Delete()
         return;
     }
 }
+
+QRectF PolygonImpl::getBoundingRect() const
+{
+    QRectF bounds;
+    for (int i = 0; i < m_points.size(); ++i) {
+        QPointF pt = m_transform.map(m_points[i]);
+        if (i == 0) {
+            bounds = QRectF(pt, pt);
+        } else {
+            bounds = bounds.united(QRectF(pt, pt));
+        }
+    }
+    return bounds;
+}

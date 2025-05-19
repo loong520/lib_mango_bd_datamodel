@@ -6,7 +6,7 @@
 
 #include <QMap>
 
-#include "Object.h"
+#include "MangoBDDataModel/base/Object.h"
 
 namespace mango {
 namespace blockdiagram {
