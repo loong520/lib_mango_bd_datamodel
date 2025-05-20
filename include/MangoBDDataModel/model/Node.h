@@ -29,6 +29,11 @@ public:
     /// \return 大小
     QSize getSize() const;
 
+    /// 设置节点大小
+    /// \param size 大小
+    /// \note root节点调用该函数无效
+    void setSize(const QSize &size);
+
     /// 是否为根节点
     /// \return 是否为根节点
     bool isRootNode() const;
@@ -45,10 +50,11 @@ public:
     /// \param graphElement 子图元
     void removeGraphElement(GraphElement *graphElement);
 
-    /// 获取子图元
+    /// 获取全部子图元
+    /// \return 子图元列表
     QList<GraphElement*> getGraphElements() const;
 
-    /// 获取子图元
+    /// 获取指定类型子图元
     /// \param type 子图元类型
     /// \return 子图元列表
     QList<GraphElement*> getGraphElements(ObjectType type) const;
@@ -65,29 +71,29 @@ public:
     /// \return 子节点列表
     QList<Node*> getSubNodes() const;
 
-    /// 增加内部引脚
-    /// \param pin 内部引脚
-    void addInternalPin(Pin *pin);
+    /// 增加独立引脚
+    /// \param pin 独立引脚
+    void addIndependentPin(Pin *pin);
 
-    /// 删除内部引脚
-    /// \param pin 内部引脚
-    void removeInternalPin(Pin *pin);
+    /// 删除独立引脚
+    /// \param pin 独立引脚
+    void removeIndependentPin(Pin *pin);
 
-    /// 获取内部引脚
+    /// 获取独立的引脚
     /// \return 内部引脚列表
-    QList<Pin*> getInternalPins() const;
+    QList<Pin*> getIndependentPin() const;
 
-    /// 增加边界引脚
-    /// \param pin 边界引脚
-    void addBoundaryPin(Pin *pin);
+    /// 增加器件引脚
+    /// \param pin 器件引脚
+    void addDevicePin(Pin *pin);
 
-    /// 删除边界引脚
-    /// \param pin 边界引脚
-    void removeBoundaryPin(Pin *pin);
+    /// 删除器件引脚
+    /// \param pin 器件引脚
+    void removeDevicePin(Pin *pin);
 
-    /// 获取边界引脚
-    /// \return 边界引脚列表
-    QList<Pin*> getBoundaryPins() const;
+    /// 获取器件引脚
+    /// \return 器件引脚列表
+    QList<Pin*> getDevicePins() const;
 
     /// 增加网络
     /// \param net 网络
@@ -101,11 +107,15 @@ public:
     /// \return 网络列表
     QList<Net*> getNets() const;
 
+    /// 获取指定位置的子图元
+    /// \param pos 位置坐标
+    /// \return 子图元列表（Z值降序排列）
+    QList<GObject *> items(const QPointF &pos) const;
 
-//    QList<GObject *> items(const QPointF &pos, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape, Qt::SortOrder order = Qt::DescendingOrder) const;
-//    QList<GObject *> items(const QRectF &rect, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape, Qt::SortOrder order = Qt::DescendingOrder) const;
-//    QList<GObject *> items(const QPainterPath &path, Qt::ItemSelectionMode mode = Qt::IntersectsItemShape, Qt::SortOrder order = Qt::DescendingOrder) const;
-
+    /// 获取指定区域内的子图元
+    /// \param rect 区域
+    /// \return 子图元列表（Z值降序排列）
+    QList<GObject *> items(const QRectF &rect) const;
 };
 
 }

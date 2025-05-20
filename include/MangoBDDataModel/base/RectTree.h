@@ -71,8 +71,8 @@ public:
     // These constant must be declared after Branch and before Node struct
     // Stuck up here for MSVC 6 compiler.  NSVC .NET 2003 is much happier.
     enum {
-        MAXNODES = TMaxNodes,                       ///< Max elements in node
-        MINNODES = TMinNodes                        ///< Min elements in node
+        MaxNodes = TMaxNodes,                       ///< Max elements in node
+        MinNodes = TMinNodes                        ///< Min elements in node
     };
 
     struct Statistics {
@@ -89,37 +89,37 @@ public:
     RectTree();
     virtual ~RectTree();
 
-    /// Insert entry
-    /// \param aMin Min of bounding rect
-    /// \param aMax Max of bounding rect
-    /// \param aDataId Positive Id of data.  Maybe zero, but negative numbers not allowed.
-    void Insert(const ElemType aMin[Dims], const ElemType aMax[Dims], const DataType& aDataId);
+    /// 插入条目
+    /// \param aMin 边界矩形的最小值
+    /// \param aMax 边界矩形的最大值
+    /// \param aDataId 数据的正标识。可能为零，但不允许为负数.
+    void insert(const ElemType aMin[Dims], const ElemType aMax[Dims], const DataType& aDataId);
 
-    /// Remove entry
-    /// \param aMin Min of bounding rect
-    /// \param aMax Max of bounding rect
-    /// \param aDataId Positive Id of data.  Maybe zero, but negative numbers not allowed.
+    /// 移除条目
+    /// \param aMin 边界矩形的最小值
+    /// \param aMax 边界矩形的最大值
+    /// \param aDataId 数据的正标识。可能为零，但不允许为负数.
     /// \return  1 if record not found, 0 if success.
-    bool Remove(const ElemType aMin[Dims], const ElemType aMax[Dims], const DataType& aDataId);
+    bool remove(const ElemType aMin[Dims], const ElemType aMax[Dims], const DataType& aDataId);
 
-    /// Find all within search rectangle
-    /// \param aMin Min of search bounding rect
-    /// \param aMax Max of search bounding rect
-    /// \param aCallback Callback function to return result.  Callback should return 'true' to continue searching
-    /// \return Returns the number of entries found
-    int Search(const ElemType aMin[Dims], const ElemType aMax[Dims], std::function<bool(const DataType&)> aCallback) const;
+    /// 在搜索矩形范围内查找所有内容
+    /// \param aMin 搜索边界矩形的最小值
+    /// \param aMax 搜索边界矩形的最大值
+    /// \param aCallback 用于返回结果的回调函数。回调函数应返回 “true” 以继续搜索
+    /// \return 返回找到的条目数量
+    int search(const ElemType aMin[Dims], const ElemType aMax[Dims], std::function<bool(const DataType&)> aCallback) const;
 
-    /// Find all within search rectangle
-    /// \param aMin Min of search bounding rect
-    /// \param aMax Max of search bounding rect
-    /// \param aCallback Callback function to return result.  Callback should return 'true' to continue searching
-    /// \param aFinished This is set to true if the search completed and false if it was interupted
-    /// \return Returns the number of entries found
-    int Search(const ElemType aMin[Dims], const ElemType aMax[Dims],
-                std::function<bool(const DataType&)> aCallback, bool& aFinished) const;
+    /// 在搜索矩形范围内查找所有内容
+    /// \param aMin 搜索边界矩形的最小值
+    /// \param aMax 搜索边界矩形的最大值
+    /// \param aCallback 用于返回结果的回调函数。回调函数应返回 “true” 以继续搜索
+    /// \param aFinished 如果搜索完成，则此项设置为 true；如果搜索被中断，则设置为 false
+    /// \return 返回找到的条目数量
+    int search(const ElemType aMin[Dims], const ElemType aMax[Dims],
+               std::function<bool(const DataType&)> aCallback, bool& aFinished) const;
 
     template <class Visitor>
-    int Search(const ElemType aMin[Dims], const ElemType aMax[Dims], Visitor& aVisitor) const
+    int search(const ElemType aMin[Dims], const ElemType aMax[Dims], Visitor& aVisitor) const
     {
 #ifdef _DEBUG
         for (int index = 0; index < Dims; ++index) {
@@ -134,7 +134,7 @@ public:
 
         // NOTE: May want to return search result another way, perhaps returning the number of found elements here.
         int cnt = 0;
-        Search(m_root, &rect, aVisitor, cnt);
+        search(m_root, &rect, aVisitor, cnt);
 
         return cnt;
     }
@@ -143,23 +143,23 @@ public:
     Statistics calcStats();
 
     /// Remove all entries from tree
-    void RemoveAll();
+    void removeAll();
 
     /// Count the data elements in this container.  This is slow as no internal counter is maintained.
-    int Count() const;
+    int count() const;
 
     /// Load tree contents from file
-    bool Load(const char* aFileName);
+    bool load(const char* aFileName);
 
     /// Load tree contents from stream
-    bool Load(RTFileStream& a_stream) const;
+    bool load(RTFileStream& a_stream) const;
 
 
-    /// Save tree contents to file
-    bool Save(const char* aFileName);
+    /// save tree contents to file
+    bool save(const char* aFileName);
 
-    /// Save tree contents to stream
-    bool Save(RTFileStream& a_stream) const;
+    /// save tree contents to stream
+    bool save(RTFileStream& a_stream) const;
 
     /**
      * Gets an ordered vector of the nearest data elements to a specified point
@@ -169,7 +169,8 @@ public:
      * @param aSquaredDist Callback routine to measure the distance from the point to the data element
      * @return vector of matching elements and their distance to the point
      */
-    std::vector<std::pair<ElemType, DataType>> NearestNeighbors(const ElemType aPoint[Dims],
+    std::vector<std::pair<ElemType, DataType>> nearestNeighbors(
+            const ElemType aPoint[Dims],
             std::function<bool(const std::size_t aNumResults, const ElemType aMinDist)> aTerminate,
             std::function<bool(const DataType aElement)> aFilter,
             std::function<ElemType(const ElemType a_point[Dims], const DataType a_data)> aSquaredDist) const;
@@ -404,7 +405,7 @@ protected:
 
         int     m_count;                ///< Count
         int     m_level;                ///< Leaf is zero, others positive
-        Branch  m_branch[MAXNODES];     ///< Branch
+        Branch  m_branch[MaxNodes];     ///< Branch
     };
 
     /// A link list of nodes for reinsertion after a delete operation
@@ -415,15 +416,15 @@ protected:
 
     /// Variables for finding a split partition
     struct PartitionVars {
-        int             m_partition[MAXNODES + 1];
+        int             m_partition[MaxNodes + 1];
         int             m_total;
         int             m_minFill;
-        bool            m_taken[MAXNODES + 1];
+        bool            m_taken[MaxNodes + 1];
         int             m_count[2];
         Rect            m_cover[2];
         ElemTypeReal    m_area[2];
 
-        Branch          m_branchBuf[MAXNODES + 1];
+        Branch          m_branchBuf[MaxNodes + 1];
         int             m_branchCount;
         Rect            m_coverSplit;
         ElemTypeReal    m_coverSplitArea;
@@ -482,7 +483,7 @@ protected:
         if (aNode->IsInternalNode()) { // This is an internal node in the tree
             for (int index = 0; index < aNode->m_count; ++index) {
                 if (Overlap(aRect, &aNode->m_branch[index].m_rect)) {
-                    if (!Search(aNode->m_branch[index].m_child, aRect, aVisitor, a_foundCount)) {
+                    if (!search(aNode->m_branch[index].m_child, aRect, aVisitor, a_foundCount)) {
                         return false; // Don't continue searching
                     }
                 }
@@ -583,8 +584,8 @@ public:
 
 RT_TEMPLATE RT_QUAL::RectTree()
 {
-    ASSERT(MAXNODES > MINNODES);
-    ASSERT(MINNODES > 0);
+    ASSERT(MaxNodes > MinNodes);
+    ASSERT(MinNodes > 0);
 
 
     // We only support machine word size simple data type eg. integer index or object pointer.
@@ -613,7 +614,7 @@ RT_QUAL::~RectTree() {
 }
 
 RT_TEMPLATE
-void RT_QUAL::Insert(const ElemType aMin[Dims], const ElemType aMax[Dims], const DataType& aDataId)
+void RT_QUAL::insert(const ElemType aMin[Dims], const ElemType aMax[Dims], const DataType& aDataId)
 {
 #ifdef _DEBUG
     for (int index = 0; index<Dims; ++index) {
@@ -631,7 +632,7 @@ void RT_QUAL::Insert(const ElemType aMin[Dims], const ElemType aMax[Dims], const
 }
 
 RT_TEMPLATE
-bool RT_QUAL::Remove(const ElemType aMin[Dims], const ElemType aMax[Dims], const DataType& aDataId)
+bool RT_QUAL::remove(const ElemType aMin[Dims], const ElemType aMax[Dims], const DataType& aDataId)
 {
 #ifdef _DEBUG
     for (int index = 0; index<Dims; ++index) {
@@ -649,7 +650,7 @@ bool RT_QUAL::Remove(const ElemType aMin[Dims], const ElemType aMax[Dims], const
 }
 
 RT_TEMPLATE
-int RT_QUAL::Search(const ElemType aMin[Dims], const ElemType aMax[Dims], std::function<bool(const DataType&)> aCallback) const
+int RT_QUAL::search(const ElemType aMin[Dims], const ElemType aMax[Dims], std::function<bool(const DataType&)> aCallback) const
 {
 #ifdef _DEBUG
     for (int index = 0; index < Dims; ++index) {
@@ -666,12 +667,12 @@ int RT_QUAL::Search(const ElemType aMin[Dims], const ElemType aMax[Dims], std::f
 
     // NOTE: May want to return search result another way, perhaps returning the number of found elements here.
     int foundCount = 0;
-    Search(m_root, &rect, foundCount, aCallback);
+    search(m_root, &rect, foundCount, aCallback);
     return foundCount;
 }
 
 RT_TEMPLATE
-int RT_QUAL::Search(const ElemType aMin[Dims], const ElemType aMax[Dims],
+int RT_QUAL::search(const ElemType aMin[Dims], const ElemType aMax[Dims],
                     std::function<bool(const DataType&)> aCallback, bool& aFinished) const
 {
 #ifdef _DEBUG
@@ -690,13 +691,13 @@ int RT_QUAL::Search(const ElemType aMin[Dims], const ElemType aMax[Dims],
     // NOTE: May want to return search result another way, perhaps returning the number of found elements here.
 
     int foundCount = 0;
-    aFinished      = Search(m_root, &rect, foundCount, aCallback);
+    aFinished      = search(m_root, &rect, foundCount, aCallback);
     return foundCount;
 }
 
 
 RT_TEMPLATE
-std::vector<std::pair<ElemType, DataType>> RT_QUAL::NearestNeighbors(
+std::vector<std::pair<ElemType, DataType>> RT_QUAL::nearestNeighbors(
         const ElemType a_point[Dims],
         std::function<bool(const std::size_t aNumResults, const ElemType aMinDist)> aTerminate,
         std::function<bool(const DataType aElement)> aFilter,
@@ -746,7 +747,7 @@ std::vector<std::pair<ElemType, DataType>> RT_QUAL::NearestNeighbors(
 }
 
 RT_TEMPLATE
-int RT_QUAL::Count() const
+int RT_QUAL::count() const
 {
     int count = 0;
     CountRec(m_root, count);
@@ -766,23 +767,23 @@ void RT_QUAL::CountRec(const Node* aNode, int& a_count) const
 }
 
 RT_TEMPLATE
-bool RT_QUAL::Load(const char* aFileName)
+bool RT_QUAL::load(const char* aFileName)
 {
-    RemoveAll(); // Clear existing tree
+    removeAll(); // Clear existing tree
 
     RTFileStream stream;
     if (!stream.OpenRead(aFileName)) {
         return false;
     }
 
-    bool result = Load(stream);
+    bool result = load(stream);
     stream.Close();
 
     return result;
 }
 
 RT_TEMPLATE
-bool RT_QUAL::Load(RTFileStream& a_stream) const
+bool RT_QUAL::load(RTFileStream& a_stream) const
 {
     // Write some kind of header
     int _dataFileId         = ('R' << 0) | ('T' << 8) | ('R' << 16) | ('E' << 24);
@@ -857,19 +858,19 @@ bool RT_QUAL::LoadRec(const Node* aNode, RTFileStream& a_stream) const
 }
 
 RT_TEMPLATE
-bool RT_QUAL::Save(const char* aFileName)
+bool RT_QUAL::save(const char* aFileName)
 {
     RTFileStream stream;
     if (!stream.OpenWrite(aFileName)) {
         return false;
     }
-    bool result = Save(stream);
+    bool result = save(stream);
     stream.Close();
     return result;
 }
 
 RT_TEMPLATE
-bool RT_QUAL::Save(RTFileStream& a_stream) const
+bool RT_QUAL::save(RTFileStream& a_stream) const
 {
     // Write some kind of header
     int dataFileId          = ('R' << 0) | ('T' << 8) | ('R' << 16) | ('E' << 24);
@@ -924,7 +925,7 @@ bool RT_QUAL::SaveRec(const Node* aNode, RTFileStream& a_stream) const
 }
 
 RT_TEMPLATE
-void RT_QUAL::RemoveAll()
+void RT_QUAL::removeAll()
 {
     // Delete all existing nodes
     Reset();
@@ -1138,7 +1139,7 @@ bool RT_QUAL::AddBranch(const Branch* aBranch, Node* aNode, Node** aNewNode) con
     ASSERT(aBranch);
     ASSERT(aNode);
 
-    if (aNode->m_count < MAXNODES) {// Split won't be necessary
+    if (aNode->m_count < MaxNodes) {// Split won't be necessary
         aNode->m_branch[aNode->m_count] = *aBranch;
         ++aNode->m_count;
 
@@ -1156,7 +1157,7 @@ bool RT_QUAL::AddBranch(const Branch* aBranch, Node* aNode, Node** aNewNode) con
 RT_TEMPLATE
 void RT_QUAL::DisconnectBranch(Node* aNode, int aIndex) const
 {
-    ASSERT(aNode && (aIndex >= 0) && (aIndex < MAXNODES));
+    ASSERT(aNode && (aIndex >= 0) && (aIndex < MaxNodes));
     ASSERT(aNode->m_count > 0);
 
     // Remove element by swapping with the last element to prevent gaps in array
@@ -1238,7 +1239,7 @@ void RT_QUAL::SplitNode(Node* aNode, const Branch* aBranch, Node** aNewNode) con
     GetBranches(aNode, aBranch, parVars);
 
     // Find partition
-    ChoosePartition(parVars, MINNODES);
+    ChoosePartition(parVars, MinNodes);
 
     // Put branches from buffer into 2 nodes according to chosen partition
     *aNewNode = AllocNode();
@@ -1308,20 +1309,20 @@ void RT_QUAL::GetBranches(Node* aNode, const Branch* aBranch, PartitionVars* aPa
     ASSERT(aNode);
     ASSERT(aBranch);
 
-    ASSERT(aNode->m_count == MAXNODES);
+    ASSERT(aNode->m_count == MaxNodes);
 
     // Load the branch buffer
-    for (int index = 0; index < MAXNODES; ++index) {
+    for (int index = 0; index < MaxNodes; ++index) {
         aParVars->m_branchBuf[index] = aNode->m_branch[index];
     }
 
-    aParVars->m_branchBuf[MAXNODES] = *aBranch;
-    aParVars->m_branchCount = MAXNODES + 1;
+    aParVars->m_branchBuf[MaxNodes] = *aBranch;
+    aParVars->m_branchCount = MaxNodes + 1;
 
     // Calculate rect containing all in the set
     aParVars->m_coverSplit = aParVars->m_branchBuf[0].m_rect;
 
-    for (int index = 1; index < MAXNODES + 1; ++index) {
+    for (int index = 1; index < MaxNodes + 1; ++index) {
         aParVars->m_coverSplit = CombineRect(&aParVars->m_coverSplit, &aParVars->m_branchBuf[index].m_rect);
     }
 
@@ -1446,7 +1447,7 @@ void RT_QUAL::PickSeeds(PartitionVars* aParVars) const
 {
     int             seed0 = 0, seed1 = 0;
     ElemTypeReal    worst, waste;
-    ElemTypeReal    area[MAXNODES + 1];
+    ElemTypeReal    area[MaxNodes + 1];
 
     for (int index = 0; index<aParVars->m_total; ++index)
     {
@@ -1578,7 +1579,7 @@ bool RT_QUAL::RemoveRectRec(const Rect*     aRect,
             {
                 if (!RemoveRectRec(aRect, aId, aNode->m_branch[index].m_child, aListNode))
                 {
-                    if (aNode->m_branch[index].m_child->m_count >= MINNODES)
+                    if (aNode->m_branch[index].m_child->m_count >= MinNodes)
                     {
                         // child removed, just resize parent rect
                         aNode->m_branch[index].m_rect =
@@ -1662,7 +1663,7 @@ bool RT_QUAL::Search(const Node* aNode, const Rect* aRect, int& a_foundCount,
         {
             if (Overlap(aRect, &aNode->m_branch[index].m_rect))
             {
-                if (!Search(aNode->m_branch[index].m_child, aRect, a_foundCount, aCallback))
+                if (!search(aNode->m_branch[index].m_child, aRect, a_foundCount, aCallback))
                 {
                     return false; // Don't continue searching
                 }

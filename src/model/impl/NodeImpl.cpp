@@ -46,11 +46,11 @@ QRectF NodeImpl::getBoundingRect() const
     QRectF rect;
     if (isRootNode()) {
         // 根节点的边界矩形为所有子节点的边界矩形的并集
-        for (auto element : m_elements) {
+        for (auto element : m_allElements) {
             auto elementRect = element->getBoundingRect();
             rect = rect.united(elementRect);
         }
-        for (auto pin : m_internalPins) {
+        for (auto pin : m_independentPins) {
             auto pinRect = pin->getBoundingRect();
             rect = rect.united(pinRect);
         }
@@ -64,7 +64,7 @@ QRectF NodeImpl::getBoundingRect() const
             auto shapeRect = m_shape->getBoundingRect();
             rect = rect.united(shapeRect);
         }
-        for (auto pin : m_boundaryPins) {
+        for (auto pin : m_devicePins) {
             auto pinRect = pin->getBoundingRect();
             rect = rect.united(pinRect);
         }
@@ -132,11 +132,28 @@ void NodeImpl::addGraphElement(GraphElementImpl *graphElement)
     if (graphElement == nullptr) {
         return;
     }
-    if (m_elements.contains(graphElement)) {
+
+    // 加入所有子图元列表
+    if (m_allElements.contains(graphElement)) {
         return;
     }
-    m_elements.append(graphElement);
+    m_allElements.append(graphElement);
     graphElement->setParent((Object*)this);
+
+    // 按类型加入不同的列表
+    if (graphElement->getObjectType() == ObjectType::kNode) {
+        addSubNode((NodeImpl*)graphElement);
+        return;
+    } else if (graphElement->getObjectType() == ObjectType::kPin) {
+        addIndependentPin((PinImpl*)graphElement);
+        return;
+    } else if (graphElement->getObjectType() == ObjectType::kNet) {
+        addNet((NetImpl*)graphElement);
+        return;
+    }
+
+    // 加入索引树
+    // todo: implement
 }
 
 void NodeImpl::removeGraphElement(GraphElementImpl *graphElement)
@@ -144,8 +161,27 @@ void NodeImpl::removeGraphElement(GraphElementImpl *graphElement)
     if (graphElement == nullptr) {
         return;
     }
-    m_elements.removeAll(graphElement);
+    if (graphElement->getObjectType() == ObjectType::kNode) {
+        removeSubNode((NodeImpl*)graphElement);
+        return;
+    } else if (graphElement->getObjectType() == ObjectType::kPin) {
+        removeIndependentPin((PinImpl*)graphElement);
+        return;
+    } else if (graphElement->getObjectType() == ObjectType::kNet) {
+        removeNet((NetImpl*)graphElement);
+        return;
+    }
+
+    // 从索引树中删除
+    // todo: implement
+
+    m_allElements.removeAll(graphElement);
     delete graphElement;
+}
+
+QList<GraphElementImpl*> NodeImpl::getGraphElements() const
+{
+    return m_allElements;
 }
 
 void NodeImpl::addSubNode(NodeImpl *node)
@@ -168,44 +204,44 @@ void NodeImpl::removeSubNode(NodeImpl *node)
     m_subNodes.removeAll(node);
 }
 
-void NodeImpl::addInternalPin(PinImpl *pin)
+void NodeImpl::addIndependentPin(PinImpl *pin)
 {
     if (pin == nullptr) {
         return;
     }
-    if (m_internalPins.contains(pin)) {
+    if (m_independentPins.contains(pin)) {
         return;
     }
-    m_internalPins.append(pin);
+    m_independentPins.append(pin);
     pin->setParent((Object*)this);
 }
 
-void NodeImpl::removeInternalPin(PinImpl *pin)
+void NodeImpl::removeIndependentPin(PinImpl *pin)
 {
     if (pin == nullptr) {
         return;
     }
-    m_internalPins.removeAll(pin);
+    m_independentPins.removeAll(pin);
 }
 
-void NodeImpl::addBoundaryPin(PinImpl *pin)
+void NodeImpl::addDevicePin(PinImpl *pin)
 {
     if (pin == nullptr) {
         return;
     }
-    if (m_boundaryPins.contains(pin)) {
+    if (m_devicePins.contains(pin)) {
         return;
     }
-    m_boundaryPins.append(pin);
+    m_devicePins.append(pin);
     pin->setParent((Object*)this);
 }
 
-void NodeImpl::removeBoundaryPin(PinImpl *pin)
+void NodeImpl::removeDevicePin(PinImpl *pin)
 {
     if (pin == nullptr) {
         return;
     }
-    m_boundaryPins.removeAll(pin);
+    m_devicePins.removeAll(pin);
 }
 
 void NodeImpl::addNet(NetImpl *net)
@@ -226,4 +262,16 @@ void NodeImpl::removeNet(NetImpl *net)
         return;
     }
     m_nets.removeAll(net);
+}
+
+QList<GObjectImpl *> NodeImpl::items(const QPointF &pos) const
+{
+    QList<GObjectImpl *> items;
+    return items;
+}
+
+QList<GObjectImpl *> NodeImpl::items(const QRectF &rect) const
+{
+    QList<GObjectImpl *> items;
+    return items;
 }

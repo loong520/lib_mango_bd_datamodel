@@ -23,6 +23,11 @@ QSize Node::getSize() const
     return impl_ptr(Node)->getSize();
 }
 
+void Node::setSize(const QSize &size)
+{
+    impl_ptr(Node)->setSize(size);
+}
+
 bool Node::isRootNode() const
 {
     return impl_ptr(Node)->isRootNode();
@@ -82,39 +87,39 @@ QList<Node*> Node::getSubNodes() const
     return nodes;
 }
 
-void Node::addInternalPin(Pin *pin)
+void Node::addIndependentPin(Pin *pin)
 {
-    impl_ptr(Node)->addInternalPin((PinImpl*)pin);
+    impl_ptr(Node)->addIndependentPin((PinImpl*)pin);
 }
 
-void Node::removeInternalPin(Pin *pin)
+void Node::removeIndependentPin(Pin *pin)
 {
-    impl_ptr(Node)->removeInternalPin((PinImpl*)pin);
+    impl_ptr(Node)->removeIndependentPin((PinImpl*)pin);
 }
 
-QList<Pin*> Node::getInternalPins() const
+QList<Pin*> Node::getIndependentPin() const
 {
     QList<Pin*> pins;
-    for (auto pin : impl_ptr(Node)->getInternalPins()) {
+    for (auto pin : impl_ptr(Node)->getIndependentPin()) {
         pins.append((Pin*)pin);
     }
     return pins;
 }
 
-void Node::addBoundaryPin(Pin *pin)
+void Node::addDevicePin(Pin *pin)
 {
-    impl_ptr(Node)->addBoundaryPin((PinImpl*)pin);
+    impl_ptr(Node)->addDevicePin((PinImpl*)pin);
 }
 
-void Node::removeBoundaryPin(Pin *pin)
+void Node::removeDevicePin(Pin *pin)
 {
-    impl_ptr(Node)->removeBoundaryPin((PinImpl*)pin);
+    impl_ptr(Node)->removeDevicePin((PinImpl*)pin);
 }
 
-QList<Pin*> Node::getBoundaryPins() const
+QList<Pin*> Node::getDevicePins() const
 {
     QList<Pin*> pins;
-    for (auto pin : impl_ptr(Node)->getBoundaryPins()) {
+    for (auto pin : impl_ptr(Node)->getDevicePins()) {
         pins.append((Pin*)pin);
     }
     return pins;
@@ -137,4 +142,22 @@ QList<Net*> Node::getNets() const
         nets.append((Net*)net);
     }
     return nets;
+}
+
+QList<GObject *> Node::items(const QPointF &pos) const
+{
+    QList<GObject *> items;
+    for (auto item : impl_ptr(Node)->items(pos)) {
+        items.append((GObject*)item);
+    }
+    return items;
+}
+
+QList<GObject *> Node::items(const QRectF &rect) const
+{
+    QList<GObject *> items;
+    for (auto item : impl_ptr(Node)->items(rect)) {
+        items.append((GObject*)item);
+    }
+    return items;
 }

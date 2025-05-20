@@ -7,9 +7,9 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Pin* Pin::New(Node* parent, const QString& name, bool inBoundary)
+Pin* Pin::New(Node* parent, const QString& name, bool devicePin)
 {
-    return PinImpl::New(parent, name, inBoundary);
+    return PinImpl::New(parent, name, devicePin);
 }
 
 Pin* Pin::New(Symbol* parent, const QString& name)

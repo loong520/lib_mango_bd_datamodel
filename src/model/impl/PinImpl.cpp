@@ -9,18 +9,18 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Pin* PinImpl::New(Node* parent, const QString& name, bool inBoundary)
+Pin* PinImpl::New(Node* parent, const QString& name, bool isDevicePin)
 {
     if (parent == nullptr) {
         // TODO: LOG_WARN
         return nullptr;
     }
-    PinImpl* impl = new PinImpl(name, (Object*)parent);
+    PinImpl* impl = new PinImpl(name, isDevicePin, (Object*)parent);
 
-    if (inBoundary) {
-        obj_impl_ptr(Node, parent)->addBoundaryPin(impl);
+    if (isDevicePin) {
+        obj_impl_ptr(Node, parent)->addDevicePin(impl);
     } else {
-        obj_impl_ptr(Node, parent)->addInternalPin(impl);
+        obj_impl_ptr(Node, parent)->addIndependentPin(impl);
     }
     return (Pin*)impl;
 }
@@ -31,17 +31,20 @@ Pin* PinImpl::New(Symbol* parent, const QString& name)
         // TODO: LOG_WARN
         return nullptr;
     }
-    PinImpl* impl = new PinImpl(name, (Object*)parent);
+    PinImpl* impl = new PinImpl(name, false, (Object*)parent);
+
     obj_impl_ptr(Symbol, parent)->addPin(impl);
     return (Pin*)impl;
 }
 
-PinImpl::PinImpl(const QString& name, Object* parent) : GraphElementImpl(parent)
+PinImpl::PinImpl(const QString& name, bool isDevicePin, Object* parent) : GraphElementImpl(parent)
 {
     // 创建一个名字label
     LabelImpl* label = new LabelImpl((Object*)this);
     label->setText(name);
     addLabel(label);
+
+    m_isDevicePin = isDevicePin;
 }
 
 bool PinImpl::isTypeOf(const ObjectType& type) const

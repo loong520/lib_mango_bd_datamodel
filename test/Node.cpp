@@ -28,7 +28,7 @@ TEST_CASE("Node::createNode")
     // 成员检查
     REQUIRE_EQ(n1->getGraphElements().size(), 0);
     REQUIRE_EQ(n1->getSubNodes().size(), 0);
-    REQUIRE_EQ(n1->getInternalPins().size(), 0);
+    REQUIRE_EQ(n1->getIndependentPin().size(), 0);
     REQUIRE_EQ(n1->getNets().size(), 0);
 }
 
@@ -62,6 +62,6 @@ TEST_CASE("Node::createSubNode")
     // 成员检查
     REQUIRE_EQ(n1->getGraphElements().size(), 0);
     REQUIRE_EQ(n1->getSubNodes().size(), 1);
-    REQUIRE_EQ(n1->getInternalPins().size(), 0);
+    REQUIRE_EQ(n1->getIndependentPin().size(), 0);
     REQUIRE_EQ(n1->getNets().size(), 0);
 }

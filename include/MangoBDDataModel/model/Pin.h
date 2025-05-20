@@ -19,8 +19,8 @@ public:
     /// 创建一个新的引脚对象
     /// \param parent 父节点
     /// \param name 引脚名称
-    /// \param inBoundary 是否在边界上(false: 视作模块端口)
-    static Pin* New(Node* parent, const QString& name, bool inBoundary);
+    /// \param inBoundary 是否器件引脚(false: 视作模块端口)
+    static Pin* New(Node* parent, const QString& name, bool devicePin = true);
 
     /// 创建一个新的引脚对象
     /// \param parent 父symbol

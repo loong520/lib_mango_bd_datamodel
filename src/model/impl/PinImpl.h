@@ -18,10 +18,10 @@ class CompositePin;
 
 class PinImpl : public GraphElementImpl {
 public:
-    static Pin* New(Node* parent, const QString& name, bool inBoundary);
+    static Pin* New(Node* parent, const QString& name, bool isDevicePin = true);
     static Pin* New(Symbol* parent, const QString& name);
 
-    PinImpl(const QString& name, Object* parent = nullptr);
+    PinImpl(const QString& name, bool isDevicePin = true, Object* parent = nullptr);
 
     ObjectType getObjectType() const override { return ObjectType::kPin; }
     bool isTypeOf(const ObjectType& type) const override;
@@ -53,10 +53,10 @@ public:
     QList<NetImpl*> m_incomingNets;
     QList<NetImpl*> m_outgoingNets;
 
-    PinShape m_shapeType = Line;
-    Direction m_direction = Left;
-
-    CompositePin* m_compositePin = nullptr;
+    PinShape        m_shapeType = Line;
+    Direction       m_direction = Left;
+    bool            m_isDevicePin;        // 是否是器件的引脚(在块图中用来区别于模块端口和实例端口,原理图中都应该是器件的引脚)
+    CompositePin*   m_compositePin = nullptr;
 };
 
 }
