@@ -30,7 +30,7 @@
 //
 
 #define RT_TEMPLATE template <class DataType, class ElemType, int Dims, class ElemTypeReal, int TMaxNodes, int TMinNodes>
-#define RT_QUAL     RectTree<DataType, ElemType, Dims, ElemTypeReal, TMaxNodes, TMinNodes>
+#define RT_QUAL     RTree<DataType, ElemType, Dims, ElemTypeReal, TMaxNodes, TMinNodes>
 
 #define RT_DONT_USE_MEMPOOLS     // This version does not contain a fixed memory allocator, fill in lines with EXAMPLE to implement one.
 #define RT_USE_SPHERICAL_VOLUME  // Better split classification, may be slower on some systems
@@ -56,7 +56,7 @@ class RTFileStream;    // File I/O helper class, look below for implementation a
 ///        array similar to MFC CArray or STL Vector for returning search query result.
 ///
 template <class DataType, class ElemType, int Dims, class ElemTypeReal = ElemType, int TMaxNodes=8, int TMinNodes = TMaxNodes/2>
-class RectTree
+class RTree
 {
 protected:
     struct Node; // Fwd decl.  Used by other internal structs and iterator
@@ -86,8 +86,8 @@ public:
 
 public:
 
-    RectTree();
-    virtual ~RectTree();
+    RTree();
+    virtual ~RTree();
 
     /// 插入条目
     /// \param aMin 边界矩形的最小值
@@ -134,7 +134,7 @@ public:
 
         // NOTE: May want to return search result another way, perhaps returning the number of found elements here.
         int cnt = 0;
-        search(m_root, &rect, aVisitor, cnt);
+        Search(m_root, &rect, aVisitor, cnt);
 
         return cnt;
     }
@@ -260,8 +260,8 @@ public:
         bool operator==(const Iterator& rhs) const
         {
             return ((m_tos <= 0 && rhs.m_tos <= 0) || 
-                   (m_tos == rhs.m_tos && m_stack[m_tos].m_node == rhs.m_stack[m_tos].m_node && 
-                    m_stack[m_tos].m_branchIndex == rhs.m_stack[m_tos].m_branchIndex));
+                    (m_tos == rhs.m_tos && m_stack[m_tos].m_node == rhs.m_stack[m_tos].m_node &&
+                     m_stack[m_tos].m_branchIndex == rhs.m_stack[m_tos].m_branchIndex));
         }
 
         bool operator!=(const Iterator& rhs) const
@@ -270,6 +270,15 @@ public:
                     (m_tos != rhs.m_tos || 
                      m_stack[m_tos].m_node != rhs.m_stack[m_tos].m_node || 
                      m_stack[m_tos].m_branchIndex != rhs.m_stack[m_tos].m_branchIndex));
+        }
+
+        /// Push node and branch onto iteration stack (For internal use only)
+        void Push(Node* aNode, int a_branchIndex)
+        {
+            m_stack[m_tos].m_node = aNode;
+            m_stack[m_tos].m_branchIndex = a_branchIndex;
+            ++m_tos;
+            ASSERT(m_tos <= MAX_STACK);
         }
 
     private:
@@ -283,7 +292,7 @@ public:
                 if (curTos.m_node->IsLeaf()) {
                     // Keep walking through siblings until we find an overlapping leaf
                     for (int i = nextBranch; i < curTos.m_node->m_count; i++) {
-                        if (RectTree::Overlap(&m_rect, &curTos.m_node->m_branch[i].m_rect)) {
+                        if (RTree::Overlap(&m_rect, &curTos.m_node->m_branch[i].m_rect)) {
                             Push(curTos.m_node, i);
                             return;
                         }
@@ -293,7 +302,7 @@ public:
                     // Look for an overlapping sibling that we can use as the fall-back node
                     // when we've iterated down the current branch
                     for (int i = nextBranch; i < curTos.m_node->m_count; i++) {
-                        if (RectTree::Overlap(&m_rect, &curTos.m_node->m_branch[i].m_rect)) {
+                        if (RTree::Overlap(&m_rect, &curTos.m_node->m_branch[i].m_rect)) {
                             Push(curTos.m_node, i);
                             break;
                         }
@@ -308,20 +317,11 @@ public:
                     // If the branch is a leaf, and it overlaps, then break with the current data
                     // Otherwise, we allow it to seed our next iteration as it may have siblings that
                     // do overlap
-                    if (nextLevelnode->IsLeaf() && RectTree::Overlap(&m_rect, &nextLevelnode->m_branch[0].m_rect)) {
+                    if (nextLevelnode->IsLeaf() && RTree::Overlap(&m_rect, &nextLevelnode->m_branch[0].m_rect)) {
                         return;
                     }
                 }
             }
-        }
-
-        /// Push node and branch onto iteration stack (For internal use only)
-        void Push(Node* aNode, int a_branchIndex)
-        {
-            m_stack[m_tos].m_node = aNode;
-            m_stack[m_tos].m_branchIndex = a_branchIndex;
-            ++m_tos;
-            ASSERT(m_tos <= MAX_STACK);
         }
 
         /// Pop element off iteration stack (For internal use only)
@@ -483,7 +483,7 @@ protected:
         if (aNode->IsInternalNode()) { // This is an internal node in the tree
             for (int index = 0; index < aNode->m_count; ++index) {
                 if (Overlap(aRect, &aNode->m_branch[index].m_rect)) {
-                    if (!search(aNode->m_branch[index].m_child, aRect, aVisitor, a_foundCount)) {
+                    if (!Search(aNode->m_branch[index].m_child, aRect, aVisitor, a_foundCount)) {
                         return false; // Don't continue searching
                     }
                 }
@@ -534,13 +534,13 @@ public:
 
     bool OpenRead(const char* aFileName)
     {
-        m_file = std::fopen(aFileName, "rb");
+        fopen_s(&m_file, aFileName, "rb");
         return m_file != nullptr;
     }
 
     bool OpenWrite(const char* aFileName)
     {
-        m_file = std::fopen(aFileName, "wb");
+        fopen_s(&m_file, aFileName, "wb");
         return m_file != nullptr;
     }
 
@@ -582,7 +582,7 @@ public:
 };
 
 
-RT_TEMPLATE RT_QUAL::RectTree()
+RT_TEMPLATE RT_QUAL::RTree()
 {
     ASSERT(MaxNodes > MinNodes);
     ASSERT(MinNodes > 0);
@@ -609,7 +609,7 @@ RT_TEMPLATE RT_QUAL::RectTree()
 }
 
 RT_TEMPLATE
-RT_QUAL::~RectTree() {
+RT_QUAL::~RTree() {
     Reset(); // Free, or reset node memory
 }
 

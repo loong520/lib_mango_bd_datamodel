@@ -49,9 +49,19 @@ QRectF ShapeImpl::getBoundingRect() const
     for (auto shape : m_subShapes) {
         auto subRect = shape->getBoundingRect();
         subRect = m_transform.mapRect(subRect);
-        bounds = bounds.united(subRect);
+        bounds |= subRect;
     }
     return bounds;
+}
+
+bool ShapeImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
+{
+    return false;
+}
+
+bool ShapeImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
+{
+    return false;
 }
 
 void ShapeImpl::addSubShape(GObjectImpl *shape)

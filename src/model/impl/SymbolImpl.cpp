@@ -54,14 +54,24 @@ QRectF SymbolImpl::getBoundingRect() const
     if (m_shape) {
         auto shapeRect = m_shape->getBoundingRect();
         shapeRect = m_transform.mapRect(shapeRect);
-        bounds = bounds.united(shapeRect);
+        bounds |= shapeRect;
     }
     for (auto pin : m_pins) {
         auto pinRect = pin->getBoundingRect();
         pinRect = m_transform.mapRect(pinRect);
-        bounds = bounds.united(pinRect);
+        bounds |= pinRect;
     }
     return bounds;
+}
+
+bool SymbolImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
+{
+    return false;
+}
+
+bool SymbolImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
+{
+    return false;
 }
 
 void SymbolImpl::addPin(PinImpl* pin)

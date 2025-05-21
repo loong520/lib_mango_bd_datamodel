@@ -5,6 +5,7 @@
 #pragma once
 
 #include "GraphElementImpl.h"
+#include "MangoBDDataModel/model/BDRTree.h"
 
 namespace mango {
 namespace blockdiagram {
@@ -13,7 +14,7 @@ namespace datamodel {
 class NodeImpl;
 class PinImpl;
 class NetImpl;
-class NodeRTree;
+class BDRTree;
 
 class NodeImpl : public GraphElementImpl {
 public:
@@ -26,6 +27,10 @@ public:
     void Delete() override;
     QRectF getBoundingRect() const override;
 
+    // 命中测试
+    bool hitTest(const QPointF &aPosition, int aAccuracy = 0) const override;
+    bool hitTest(const QRectF &aRect, bool aContained, int aAccuracy = 0) const override;
+
     void initNodeSize();
 
     bool isRootNode() const { return getParent() == nullptr; }
@@ -36,9 +41,9 @@ public:
     void setSize(const QSize &size);
 
     // 子图元（node下的所有图元）
-    void addGraphElement(GraphElementImpl *graphElement);
-    void removeGraphElement(GraphElementImpl *graphElement);
-    QList<GraphElementImpl*> getGraphElements() const;
+    void addGraphElement(GObjectImpl *element);
+    void removeGraphElement(GObjectImpl *element);
+    QList<GObjectImpl*> getGraphElements() const;
 
     // 子node
     void addSubNode(NodeImpl *node);
@@ -60,17 +65,20 @@ public:
     void removeNet(NetImpl *net);
     QList<NetImpl*> getNets() const { return m_nets; }
 
+    // 空间索引
+    BDRTree& items() { return m_rtree; }
+    const BDRTree& items() const { return m_rtree; }
+
     // 定位图元
     QList<GObjectImpl *> items(const QPointF &pos) const;
     QList<GObjectImpl *> items(const QRectF &rect) const;
 
 public:
-    QList<GraphElementImpl*> m_allElements; // 节点内的所有子图元
     QList<NodeImpl*> m_subNodes;            // 内部的子node
     QList<PinImpl*>  m_independentPins;     // 内部的子pin
     QList<PinImpl*>  m_devicePins;          // node or symbol边界上的pin
     QList<NetImpl*>  m_nets;                // 内部的连线
-    NodeRTree* m_rtree = nullptr;
+    BDRTree          m_rtree;               // 空间索引树，保存了所有图元
 };
 
 }

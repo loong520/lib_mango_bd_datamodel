@@ -36,12 +36,33 @@ bool LabelImpl::isTypeOf(const ObjectType& type) const
 
 void LabelImpl::Delete()
 {
-
+    if (!m_parent) {
+        // TODO: LOG_ERROR
+        return;
+    }
+    auto ptr = dynamic_cast<GraphElementImpl*>((ObjectImpl*)m_parent);
+    if (ptr) {
+        obj_impl_ptr(GraphElement, m_parent)->removeLabel(this);
+        return;
+    } else {
+        // TODO: LOG_ERROR
+        return;
+    }
 }
 
 QRectF LabelImpl::getBoundingRect() const
 {
     return QRectF();
+}
+
+bool LabelImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
+{
+    return false;
+}
+
+bool LabelImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
+{
+    return false;
 }
 
 void LabelImpl::setText(const QString& text)

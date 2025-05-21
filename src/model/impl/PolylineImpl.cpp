@@ -55,8 +55,18 @@ QRectF PolylineImpl::getBoundingRect() const
         if (i == 0) {
             bounds = QRectF(pt, pt);
         } else {
-            bounds = bounds.united(QRectF(pt, pt));
+            bounds |= QRectF(pt, pt);
         }
     }
     return bounds;
+}
+
+bool PolylineImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
+{
+    return false;
+}
+
+bool PolylineImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
+{
+    return false;
 }

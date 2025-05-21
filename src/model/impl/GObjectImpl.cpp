@@ -197,13 +197,9 @@ void GObjectImpl::setZValue(int zValue)
 
 bool GObjectImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
 {
-    double maxdist = aAccuracy;
-    if( getBorderWidth() > 0 ) {
-        maxdist += getBorderWidth() / 2.0;
-    }
-
     return false;
 }
+
 bool GObjectImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
 {
     return false;

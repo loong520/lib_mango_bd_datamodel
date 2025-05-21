@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include "MangoBDDataModel/model/GraphElement.h"
+#include "MangoBDDataModel/model/Pin.h"
 
 namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class MANGO_BD_DATAMODEL_API CompositePin : public GraphElement {
+class MANGO_BD_DATAMODEL_API CompositePin : public Pin {
 public:
 
 

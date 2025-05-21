@@ -132,6 +132,18 @@ enum MANGO_BD_DATAMODEL_API PinShape {
     Inherit
 };
 
+/// 定义图元外观的改变程度
+enum GObjectUpdateFlags {
+    None        = 0x00,     ///< 无需更新
+    Appearance  = 0x01,     ///< 可见性标志已更改
+    Color       = 0x02,     ///< 颜色已经改变
+    Geometry    = 0x04,     ///< 位置或形状已发生变化
+    Layers      = 0x08,     ///< 图层已更改
+    Initial_Add = 0x10,     ///< 项目正在添加到视图中
+    Repaint     = 0x20,     ///< 物品需要重新绘制
+    All         = 0xef      ///< 除了 Initial_Add 之外的所有内容
+};
+
 } // end of namespace datamodel
 } // end of namespace blockdiagram
 } // end of namespace mango

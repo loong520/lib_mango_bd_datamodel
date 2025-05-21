@@ -22,6 +22,16 @@ NetImpl::NetImpl(Object* parent) : GraphElementImpl(parent)
 {
 }
 
+bool NetImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
+{
+    return false;
+}
+
+bool NetImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
+{
+    return false;
+}
+
 void NetImpl::addSource(PinImpl* pin)
 {
     if (pin == nullptr) {

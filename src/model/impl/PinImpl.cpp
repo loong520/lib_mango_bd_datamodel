@@ -69,6 +69,16 @@ QRectF PinImpl::getBoundingRect() const
     return getBoundingRect();
 }
 
+bool PinImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
+{
+    return false;
+}
+
+bool PinImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
+{
+    return false;
+}
+
 void PinImpl::setName(const QString& name)
 {
     auto nameLabel = GraphElementImpl::findMainName(this);

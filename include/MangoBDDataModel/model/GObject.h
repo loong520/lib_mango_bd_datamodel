@@ -135,13 +135,13 @@ public:
     /// @param zValue z值
     void setZValue(int zValue);
 
-    /// 测试点是否在图形内
+    /// 测试点是否在该项内部或边界上
     /// @param aPosition 点
-    /// @param aAccuracy 精度(GObject的boundingRect基础上外扩或者内缩)
+    /// @param aAccuracy 精度(GObject的边框基础上再进行外扩或者内缩)
     /// @return 如果点在图形内，则返回true，否则返回false
     bool hitTest(const QPointF& aPosition, int aAccuracy = 0) const;
 
-    /// 测试矩形是否在图形内
+    /// 测试矩形是否与该项相交
     /// @param aRect 矩形
     /// @param aContained 是否包含
     /// @param aAccuracy 精度（aRect基础上外扩或者内缩）

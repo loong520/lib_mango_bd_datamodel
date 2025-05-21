@@ -64,10 +64,20 @@ QRectF ElipseImpl::getBoundingRect() const
         if (i == 0) {
             bounds = QRectF(pt, pt);
         } else {
-            bounds = bounds.united(QRectF(pt, pt));
+            bounds |= QRectF(pt, pt);
         }
     }
     return bounds;
+}
+
+bool ElipseImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
+{
+    return false;
+}
+
+bool ElipseImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
+{
+    return false;
 }
 
 void ElipseImpl::setCenter(const QPointF& center)

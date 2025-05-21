@@ -4,6 +4,7 @@
 
 #include "ArcImpl.h"
 #include "ShapeImpl.h"
+#include "NodeImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 
@@ -41,9 +42,10 @@ void ArcImpl::Delete()
     ObjectType::TypeId typeId = m_parent->getObjectType();
     if (typeId == ObjectType::kShape) {
         obj_impl_ptr(Shape, m_parent)->removeSubShape((GObjectImpl*)this);
+    } else if (typeId == ObjectType::kNode) {
+        obj_impl_ptr(Node, m_parent)->removeGraphElement(this);
     } else {
         // TODO: LOG_ERROR
-        return;
     }
 }
 
@@ -60,10 +62,20 @@ QRectF ArcImpl::getBoundingRect() const
         if (i == 0) {
             bounds = QRectF(pt, pt);
         } else {
-            bounds = bounds.united(QRectF(pt, pt));
+            bounds |= QRectF(pt, pt);
         }
     }
     return bounds;
+}
+
+bool ArcImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
+{
+    return false;
+}
+
+bool ArcImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
+{
+    return false;
 }
 
 void ArcImpl::setCenter(const QPointF center)

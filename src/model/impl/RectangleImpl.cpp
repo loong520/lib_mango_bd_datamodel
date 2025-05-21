@@ -52,6 +52,16 @@ QRectF RectangleImpl::getBoundingRect() const
     return QRectF(m_topLeft, QSizeF(m_width, m_height));
 }
 
+bool RectangleImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
+{
+    return false;
+}
+
+bool RectangleImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
+{
+    return false;
+}
+
 void RectangleImpl::setTopLeft(const QPointF& topLeft)
 {
     m_topLeft = topLeft;

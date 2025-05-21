@@ -58,14 +58,24 @@ QRectF GraphElementImpl::getBoundingRect() const
     if (m_shape) {
         auto shapeRect = m_shape->getBoundingRect();
         shapeRect = m_transform.mapRect(shapeRect);
-        rect = rect.united(shapeRect);
+        rect |= shapeRect;
     }
     for (auto label : m_labels) {
         auto labelRect = label->getBoundingRect();
         labelRect = m_transform.mapRect(labelRect);
-        rect = rect.united(labelRect);
+        rect |= labelRect;
     }
     return rect;
+}
+
+bool GraphElementImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
+{
+    return false;
+}
+
+bool GraphElementImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
+{
+    return false;
 }
 
 void GraphElementImpl::setName(const QString& name)
@@ -136,9 +146,7 @@ void GraphElementImpl::removeLabel(LabelImpl *label)
     if (label == nullptr) {
         return;
     }
-
     m_labels.removeAll(label);
-    label->Delete();
 }
 
 QList<LabelImpl*> GraphElementImpl::getLabels() const

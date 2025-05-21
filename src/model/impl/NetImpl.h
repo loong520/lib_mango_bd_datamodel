@@ -19,6 +19,10 @@ public:
 
     NetImpl(Object* parent = nullptr);
 
+    // 命中测试
+    bool hitTest(const QPointF &aPosition, int aAccuracy = 0) const override;
+    bool hitTest(const QRectF &aRect, bool aContained, int aAccuracy = 0) const override;
+
     // 源端
     void addSource(PinImpl* pin);
     void removeSource(PinImpl* pin);

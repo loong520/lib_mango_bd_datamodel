@@ -26,6 +26,10 @@ public:
     void Delete() override;
     QRectF getBoundingRect() const override;
 
+    // 命中测试
+    bool hitTest(const QPointF &aPosition, int aAccuracy = 0) const override;
+    bool hitTest(const QRectF &aRect, bool aContained, int aAccuracy = 0) const override;
+
 public:
     QList<QPointF> m_points;
 };
