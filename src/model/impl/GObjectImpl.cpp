@@ -178,6 +178,11 @@ void GObjectImpl::mirrorX()
     m_transform.scale(1, -1);
 }
 
+void GObjectImpl::setTransform(const QTransform& transform)
+{
+    m_transform = transform;
+}
+
 QTransform GObjectImpl::getTransform() const
 {
     return m_transform;

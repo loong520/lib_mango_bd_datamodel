@@ -74,6 +74,7 @@ public:
 public:
     bool m_isRoot = false;                  // 根节点
     bool m_isHierarchical = false;          // 层次节点
+    QSizeF m_size;                          // 节点大小(用来保存根节点大小)
     QList<NodeImpl*> m_subNodes;            // 内部的子node
     QList<PinImpl*>  m_independentPins;     // 内部的子pin
     QList<PinImpl*>  m_devicePins;          // node or symbol边界上的pin

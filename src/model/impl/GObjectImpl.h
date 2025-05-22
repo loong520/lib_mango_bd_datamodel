@@ -61,6 +61,7 @@ public:
     void mirrorX();
     void mirrorY();
     // 矩阵变换
+    void setTransform(const QTransform& transform);
     QTransform getTransform() const;
     void concat(const QTransform& other);
 
@@ -84,6 +85,9 @@ public:
     int     m_zValue = 0;
     QPointF m_pos;
     QTransform m_transform;
+
+    QTransform m_sceneTransform;        // 场景变换矩阵，用于计算场景坐标（不需要持久化）
+    bool m_sceneTransformDirty = true;  // 场景变换矩阵是否需要更新（不需要持久化）
 };
 
 }

@@ -22,7 +22,7 @@ Node* NodeImpl::New(Node *parent, bool isHierarchical, bool isRoot)
 NodeImpl::NodeImpl(Object* parent, bool isHierarchical, bool isRoot)
     : GraphElementImpl(parent), m_isHierarchical(isHierarchical), m_isRoot(isRoot)
 {
-    if (m_shape) {
+    if (!isRoot && m_shape) {
         int defaultWidth = 120;
         int defaultHeight = 200;
 
@@ -35,6 +35,9 @@ NodeImpl::NodeImpl(Object* parent, bool isHierarchical, bool isRoot)
         RectangleImpl* rect = (RectangleImpl*)RectangleImpl::New((Shape*)m_shape);
         rect->setWidth(defaultWidth);
         rect->setHeight(defaultHeight);
+    }
+    if (isRoot) {
+        m_size = QSize(2000, 2000); // 根节点的默认大小(画布大小，左上角为原点)
     }
 }
 
