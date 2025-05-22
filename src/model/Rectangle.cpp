@@ -12,6 +12,21 @@ Rectangle* Rectangle::New(Shape* parent)
     return RectangleImpl::New(parent);
 }
 
+Rectangle* Rectangle::New(Shape* parent, const QRectF &rect)
+{
+    return RectangleImpl::New(parent, rect);
+}
+
+void Rectangle::setRect(const QRectF &rect)
+{
+    impl_ptr(Rectangle)->setRect(rect);
+}
+
+QRectF Rectangle::getRect() const
+{
+    return impl_ptr(Rectangle)->getRect();
+}
+
 void Rectangle::setTopLeft(const QPointF& topLeft)
 {
     impl_ptr(Rectangle)->setTopLeft(topLeft);
@@ -37,7 +52,7 @@ void Rectangle::setHeight(double height)
     impl_ptr(Rectangle)->setHeight(height);
 }
 
-void Rectangle::setSize(const QSize& size)
+void Rectangle::setSize(const QSizeF& size)
 {
     impl_ptr(Rectangle)->setSize(size);
 }
@@ -47,7 +62,7 @@ double Rectangle::getHeight() const
     return impl_ptr(Rectangle)->getHeight();
 }
 
-QSize Rectangle::getSize() const
+QSizeF Rectangle::getSize() const
 {
     return impl_ptr(Rectangle)->getSize();
 }

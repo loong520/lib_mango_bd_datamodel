@@ -9,11 +9,16 @@ using namespace mango::blockdiagram::datamodel;
 
 Polyline* PolylineImpl::New(Shape* parent)
 {
+    return New(parent, {});
+}
+
+Polyline* PolylineImpl::New(Shape* parent, const QList<QPointF> &v)
+{
     if (!parent) {
         // TODO: LOG_WARN
         return nullptr;
     }
-    PolylineImpl* impl = new PolylineImpl((Object*)parent);
+    PolylineImpl* impl = new PolylineImpl(v, (Object*)parent);
 
     obj_impl_ptr(Shape, parent)->addSubShape((GObjectImpl*)impl);
 
@@ -49,15 +54,12 @@ void PolylineImpl::Delete()
 
 QRectF PolylineImpl::getBoundingRect() const
 {
-    QRectF bounds;
-    for (int i = 0; i < m_points.size(); ++i) {
-        QPointF pt = m_transform.map(m_points[i]);
-        if (i == 0) {
-            bounds = QRectF(pt, pt);
-        } else {
-            bounds |= QRectF(pt, pt);
-        }
-    }
+    QPolygonF poly(toVector());
+
+    QRectF bounds = poly.boundingRect();
+
+    inflateAndTransform(bounds);
+
     return bounds;
 }
 
@@ -69,4 +71,44 @@ bool PolylineImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
 bool PolylineImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
 {
     return false;
+}
+
+void PolylineImpl::append(const QPointF &p)
+{
+    QList<QPointF>::append(p);
+}
+
+void PolylineImpl::append(const QList<QPointF> &points)
+{
+    QList<QPointF>::append(points);
+}
+
+void PolylineImpl::prepend(const QPointF &p)
+{
+    QList<QPointF>::prepend(p);
+}
+
+void PolylineImpl::replace(int index, const QPointF &p)
+{
+    QList<QPointF>::replace(index, p);
+}
+
+// 删除点
+void PolylineImpl::removeAt(int i)
+{
+    QList<QPointF>::removeAt(i);
+}
+
+void PolylineImpl::removeFirst()
+{
+    QList<QPointF>::removeFirst();
+}
+void PolylineImpl::removeLast()
+{
+    QList<QPointF>::removeLast();
+}
+
+void PolylineImpl::clear()
+{
+    QList<QPointF>::clear();
 }

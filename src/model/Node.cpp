@@ -8,22 +8,17 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Node* Node::New(Node* parent)
+Node* Node::New(Node* parent, bool isHierarchical, bool isRoot)
 {
-    return NodeImpl::New(parent);
+    return NodeImpl::New(parent, isHierarchical, isRoot);
 }
 
-void Node::initNodeSize()
-{
-    impl_ptr(Node)->initNodeSize();
-}
-
-QSize Node::getSize() const
+QSizeF Node::getSize() const
 {
     return impl_ptr(Node)->getSize();
 }
 
-void Node::setSize(const QSize &size)
+void Node::setSize(const QSizeF &size)
 {
     impl_ptr(Node)->setSize(size);
 }

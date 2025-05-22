@@ -9,11 +9,20 @@ using namespace mango::blockdiagram::datamodel;
 
 Polygon* PolygonImpl::New(Shape* parent)
 {
+    return New(parent, {});
+}
+
+Polygon* PolygonImpl::New(Shape* parent, const QList<QPointF> &v)
+{
     if (!parent) {
         // TODO: LOG_WARN
         return nullptr;
     }
-    PolygonImpl* impl = new PolygonImpl((Object*)parent);
+    if (v.isEmpty() || v.first() == v.last()) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PolygonImpl* impl = new PolygonImpl(v, (Object*)parent);
 
     obj_impl_ptr(Shape, parent)->addSubShape((GObjectImpl*)impl);
 
@@ -49,15 +58,12 @@ void PolygonImpl::Delete()
 
 QRectF PolygonImpl::getBoundingRect() const
 {
-    QRectF bounds;
-    for (int i = 0; i < m_points.size(); ++i) {
-        QPointF pt = m_transform.map(m_points[i]);
-        if (i == 0) {
-            bounds = QRectF(pt, pt);
-        } else {
-            bounds |= QRectF(pt, pt);
-        }
-    }
+    QPolygonF poly(toVector());
+
+    QRectF bounds = poly.boundingRect();
+
+    inflateAndTransform(bounds);
+
     return bounds;
 }
 
@@ -69,4 +75,50 @@ bool PolygonImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
 bool PolygonImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
 {
     return false;
+}
+
+QPolygonF PolygonImpl::toQPolygon() const
+{
+    QPolygonF poly(this->toVector());
+    return poly;
+}
+
+void PolygonImpl::append(const QPointF &p)
+{
+    QList<QPointF>::append(p);
+}
+
+void PolygonImpl::append(const QList<QPointF> &points)
+{
+    QList<QPointF>::append(points);
+}
+
+void PolygonImpl::prepend(const QPointF &p)
+{
+    QList<QPointF>::prepend(p);
+}
+
+void PolygonImpl::replace(int index, const QPointF &p)
+{
+    QList<QPointF>::replace(index, p);
+}
+
+// 删除点
+void PolygonImpl::removeAt(int i)
+{
+    QList<QPointF>::removeAt(i);
+}
+
+void PolygonImpl::removeFirst()
+{
+    QList<QPointF>::removeFirst();
+}
+void PolygonImpl::removeLast()
+{
+    QList<QPointF>::removeLast();
+}
+
+void PolygonImpl::clear()
+{
+    QList<QPointF>::clear();
 }

@@ -14,11 +14,14 @@ class Shape;
 
 class MANGO_BD_DATAMODEL_API Rectangle : public GObject {
 public:
-
     /// 创建一个新的矩形对象
     /// \param parent 父对象
     /// \return 折线对象指针
     static Rectangle* New(Shape* parent);
+    static Rectangle* New(Shape* parent, const QRectF &rect);
+
+    void setRect(const QRectF &rect);
+    inline QRectF getRect() const;
 
     /// 设置矩形的左上角坐标
     /// \param topLeft 左上角坐标
@@ -46,11 +49,11 @@ public:
 
     /// 获取矩形的大小
     /// \param size 大小
-    void setSize(const QSize& size);
+    void setSize(const QSizeF& size);
 
     /// 获取矩形的大小
     /// \return 大小
-    QSize getSize() const;
+    QSizeF getSize() const;
 };
 
 }

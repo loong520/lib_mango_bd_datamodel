@@ -131,6 +131,9 @@ QPointF GObjectImpl::getPos() const
 
 void GObjectImpl::translate(const QPointF& offset)
 {
+    if (offset.isNull()) {
+        return;
+    }
     m_transform.translate(offset.x(), offset.y());
 }
 
@@ -213,4 +216,12 @@ int GObjectImpl::getBorderWidth() const
 void GObjectImpl::setBorderWidth(int width)
 {
     // todo: implement
+}
+
+void GObjectImpl::inflateAndTransform(QRectF &rect) const
+{
+    if (auto bw = getBorderWidth() / 2.0; (!qFuzzyIsNull(bw) && (bw > 0.0))) {
+        rect.adjust(-bw, -bw, bw, bw);
+    }
+    rect = m_transform.mapRect(rect);
 }

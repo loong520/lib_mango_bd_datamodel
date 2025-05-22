@@ -35,6 +35,7 @@ public:
 
 public:
     QList<PinImpl*> m_pins;
+    Symbol* m_libSymbol = nullptr;
 };
 
 }

@@ -16,8 +16,10 @@ class Shape;
 class RectangleImpl : public GObjectImpl {
 public:
     static Rectangle* New(Shape* parent);
+    static Rectangle* New(Shape* parent, const QRectF &rect);
 
-    RectangleImpl(Object* parent = nullptr) : GObjectImpl(parent)
+    RectangleImpl(const QRectF &rect, Object* parent = nullptr)
+        : GObjectImpl(parent), m_rect(rect)
     {
     }
 
@@ -30,22 +32,25 @@ public:
     bool hitTest(const QPointF &aPosition, int aAccuracy = 0) const override;
     bool hitTest(const QRectF &aRect, bool aContained, int aAccuracy = 0) const override;
 
+    void setRect(const QRectF &rect);
+    inline QRectF getRect() const { return m_rect;}
+
     void setTopLeft(const QPointF& topLeft);
-    QPointF getTopLeft() const;
+    inline QPointF getTopLeft() const { return m_rect.topLeft(); }
 
     void setWidth(double width);
-    double getWidth() const;
+    inline double getWidth() const { return m_rect.width(); }
 
     void setHeight(double height);
-    double getHeight() const;
+    inline double getHeight() const { return m_rect.height();}
 
-    void setSize(const QSize& size);
-    QSize getSize() const;
+    void setSize(const QSizeF& size);
+    inline QSizeF getSize() const { return m_rect.size(); }
+
+    inline bool isValid() const noexcept { return m_rect.isValid(); }
 
 public:
-    QPointF m_topLeft = {0, 0};
-    double  m_width = 0;
-    double  m_height = 0;
+    QRectF m_rect;
 };
 
 }

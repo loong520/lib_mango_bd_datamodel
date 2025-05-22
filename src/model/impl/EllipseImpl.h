@@ -10,18 +10,20 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class Elipse;
+class Ellipse;
 class Shape;
 
-class ElipseImpl : public GObjectImpl {
+class EllipseImpl : public GObjectImpl {
 public:
-    static Elipse* New(Shape* parent);
+    static Ellipse* New(Shape* parent);
+    static Ellipse* New(Shape* parent, double radiusX, double radiusY, const QPointF& center);
 
-    ElipseImpl(Object* parent = nullptr) : GObjectImpl(parent)
+    EllipseImpl(double radiusX, double radiusY, const QPointF& center, Object* parent = nullptr)
+        : GObjectImpl(parent), m_radiusX(radiusX), m_radiusY(radiusY), m_center(center)
     {
     }
 
-    ObjectType getObjectType() const override { return ObjectType::kElipse; }
+    ObjectType getObjectType() const override { return ObjectType::kEllipse; }
     bool isTypeOf(const ObjectType &type) const override;
     void Delete() override;
     QRectF getBoundingRect() const override;

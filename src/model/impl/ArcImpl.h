@@ -16,8 +16,10 @@ class Shape;
 class ArcImpl : public GObjectImpl {
 public:
     static Arc* New(Shape* parent);
+    static Arc* New(Shape* parent, double radius, const QPointF& center, double startAngle, double spanAngle);
 
-    ArcImpl(Object* parent = nullptr) : GObjectImpl(parent)
+    ArcImpl(double radius, const QPointF& center, double startAngle, double spanAngle, Object* parent = nullptr)
+        : GObjectImpl(parent), m_radius(radius), m_center(center), m_startAngle(startAngle), m_spanAngle(spanAngle)
     {
     }
 

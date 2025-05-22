@@ -2,36 +2,40 @@
 // Created by 18224 on 2025/5/7.
 //
 
-#include "ElipseImpl.h"
+#include "EllipseImpl.h"
 #include "ShapeImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 
-Elipse* ElipseImpl::New(Shape* parent)
+Ellipse* EllipseImpl::New(Shape* parent)
+{
+    return New(parent, 0.0, 0.0, {});
+}
+
+Ellipse* EllipseImpl::New(Shape* parent, double radiusX, double radiusY, const QPointF& center)
 {
     if (!parent) {
         // TODO: LOG_WARN
         return nullptr;
     }
-    ElipseImpl* impl = new ElipseImpl((Object*)parent);
-
+    EllipseImpl* impl = new EllipseImpl(radiusX, radiusY, center, (Object*)parent);
     obj_impl_ptr(Shape, parent)->addSubShape((GObjectImpl*)impl);
 
-    return (Elipse*)impl;
+    return (Ellipse*)impl;
 }
 
-bool ElipseImpl::isTypeOf(const ObjectType &type) const
+bool EllipseImpl::isTypeOf(const ObjectType &type) const
 {
     auto typeId = type.getType();
     if (typeId == ObjectType::kObject ||
         typeId == ObjectType::kGObject ||
-        typeId == ObjectType::kElipse) {
+        typeId == ObjectType::kEllipse) {
         return true;
     }
     return false;
 }
 
-void ElipseImpl::Delete()
+void EllipseImpl::Delete()
 {
     if (!m_parent) {
         // TODO: LOG_ERROR
@@ -47,65 +51,54 @@ void ElipseImpl::Delete()
     }
 }
 
-QRectF ElipseImpl::getBoundingRect() const
+QRectF EllipseImpl::getBoundingRect() const
 {
     // {cx - rx, cy}, {cx + rx, cy}, {cx, cy - ry}, {cx, cy + ry}
     double cx = m_center.x();
     double cy = m_center.y();
-    QPointF pts[4] = {
-        {cx - m_radiusX, m_radiusY},
-        {cx + m_radiusX, m_radiusY},
-        {cx, cy - m_radiusY},
-        {cx, cy + m_radiusY}
-    };
-    QRectF bounds;
-    for (int i = 0; i < 4; ++i) {
-        QPointF pt = m_transform.map(pts[i]);
-        if (i == 0) {
-            bounds = QRectF(pt, pt);
-        } else {
-            bounds |= QRectF(pt, pt);
-        }
-    }
+
+    QRectF bounds{cx - m_radiusY, cy - m_radiusX, m_radiusY * 2, m_radiusX * 2};
+    bounds = m_transform.mapRect(bounds);
+
     return bounds;
 }
 
-bool ElipseImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
+bool EllipseImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
 {
     return false;
 }
 
-bool ElipseImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
+bool EllipseImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) const
 {
     return false;
 }
 
-void ElipseImpl::setCenter(const QPointF& center)
+void EllipseImpl::setCenter(const QPointF& center)
 {
     m_center = center;
 }
 
-QPointF ElipseImpl::getCenter() const
+QPointF EllipseImpl::getCenter() const
 {
     return m_center;
 }
 
-void ElipseImpl::setRadiusX(double radiusX)
+void EllipseImpl::setRadiusX(double radiusX)
 {
     m_radiusX = radiusX;
 }
 
-double ElipseImpl::getRadiusX() const
+double EllipseImpl::getRadiusX() const
 {
     return m_radiusX;
 }
 
-void ElipseImpl::setRadiusY(double radiusY)
+void EllipseImpl::setRadiusY(double radiusY)
 {
     m_radiusY = radiusY;
 }
 
-double ElipseImpl::getRadiusY() const
+double EllipseImpl::getRadiusY() const
 {
     return m_radiusY;
 }

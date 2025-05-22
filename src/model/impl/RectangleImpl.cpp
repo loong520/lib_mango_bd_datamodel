@@ -9,11 +9,16 @@ using namespace mango::blockdiagram::datamodel;
 
 Rectangle* RectangleImpl::New(Shape* parent)
 {
+    return New(parent, {});
+}
+
+Rectangle* RectangleImpl::New(Shape* parent, const QRectF &rect)
+{
     if (!parent) {
         // TODO: LOG_WARN
         return nullptr;
     }
-    RectangleImpl* impl = new RectangleImpl((Object*)parent);
+    RectangleImpl* impl = new RectangleImpl(rect, (Object*)parent);
 
     obj_impl_ptr(Shape, parent)->addSubShape((GObjectImpl*)impl);
 
@@ -49,7 +54,11 @@ void RectangleImpl::Delete()
 
 QRectF RectangleImpl::getBoundingRect() const
 {
-    return QRectF(m_topLeft, QSizeF(m_width, m_height));
+    QRectF rect = m_rect;
+
+    inflateAndTransform(rect);
+
+    return rect;
 }
 
 bool RectangleImpl::hitTest(const QPointF &aPosition, int aAccuracy) const
@@ -62,43 +71,27 @@ bool RectangleImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy)
     return false;
 }
 
-void RectangleImpl::setTopLeft(const QPointF& topLeft)
+void RectangleImpl::setRect(const QRectF &rect)
 {
-    m_topLeft = topLeft;
+    m_rect = rect;
 }
 
-QPointF RectangleImpl::getTopLeft() const
+void RectangleImpl::setTopLeft(const QPointF& topLeft)
 {
-    return m_topLeft;
+    m_rect.setTopLeft(topLeft);
 }
 
 void RectangleImpl::setWidth(double width)
 {
-    m_width = width;
-}
-
-double RectangleImpl::getWidth() const
-{
-    return m_width;
+    m_rect.setWidth(width);
 }
 
 void RectangleImpl::setHeight(double height)
 {
-    m_height = height;
+    m_rect.setHeight(height);
 }
 
-void RectangleImpl::setSize(const QSize& size)
+void RectangleImpl::setSize(const QSizeF& size)
 {
-    m_width = size.width();
-    m_height = size.height();
-}
-
-double RectangleImpl::getHeight() const
-{
-    return m_height;
-}
-
-QSize RectangleImpl::getSize() const
-{
-    return QSize(m_width, m_height);
+    m_rect.setSize(size);
 }

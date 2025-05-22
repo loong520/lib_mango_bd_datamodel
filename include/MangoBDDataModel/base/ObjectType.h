@@ -22,7 +22,7 @@ public:
         kObject = 1,            ///< "Object"
         kGObject = 2,           ///< "GObject"
         kRectangle = 3,         ///< "Rectangle"
-        kElipse = 4,            ///< "Elipse"
+        kEllipse = 4,           ///< "Ellipse"
         kPolygon = 5,           ///< "Polygon"
         kPolyline = 6,          ///< "Polyline"
         kArc = 7,               ///< "Arc"

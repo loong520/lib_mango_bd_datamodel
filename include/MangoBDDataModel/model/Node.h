@@ -17,22 +17,20 @@ class MANGO_BD_DATAMODEL_API Node : public GraphElement {
 public:
     /// 创建一个新的节点对象
     /// \param parent 父节点
+    /// \param isHierarchical 是否为层次节点
+    /// \param isRoot 是否为根节点
     /// \return 新建节点对象
     /// \note parent为空视为root节点，不会有shape
-    static Node* New(Node* parent);
-
-    /// 初始化节点大小
-    /// \note root节点调用该函数无效
-    void initNodeSize();
+    static Node* New(Node* parent, bool isHierarchical = false, bool isRoot = false);
 
     /// 节点大小
     /// \return 大小
-    QSize getSize() const;
+    QSizeF getSize() const;
 
     /// 设置节点大小
     /// \param size 大小
     /// \note root节点调用该函数无效
-    void setSize(const QSize &size);
+    void setSize(const QSizeF &size);
 
     /// 是否为根节点
     /// \return 是否为根节点

@@ -76,6 +76,9 @@ public:
     virtual int getBorderWidth() const;
     virtual void setBorderWidth(int width);
 
+    // 叠加边框和变换
+    void inflateAndTransform(QRectF &rect) const;
+
 public:
     quint32 m_flags = 0;
     int     m_zValue = 0;

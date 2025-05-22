@@ -10,18 +10,32 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Node* NodeImpl::New(Node *parent)
+Node* NodeImpl::New(Node *parent, bool isHierarchical, bool isRoot)
 {
-    NodeImpl* impl = new NodeImpl((Object*)parent);
+    NodeImpl* impl = new NodeImpl((Object*)parent, isHierarchical, isRoot);
     if (parent) {
-        impl->initNodeSize();
         obj_impl_ptr(Node, parent)->addSubNode(impl);
     }
     return (Node*)impl;
 }
 
-NodeImpl::NodeImpl(Object* parent) : GraphElementImpl(parent)
+NodeImpl::NodeImpl(Object* parent, bool isHierarchical, bool isRoot)
+    : GraphElementImpl(parent), m_isHierarchical(isHierarchical), m_isRoot(isRoot)
 {
+    if (m_shape) {
+        int defaultWidth = 120;
+        int defaultHeight = 200;
+
+        for (auto subShape : m_shape->getSubShapes()) {
+            if (subShape->getObjectType() == ObjectType::kRectangle) {
+                ((RectangleImpl*)subShape)->setSize(QSize(defaultWidth, defaultHeight));
+                return;
+            }
+        }
+        RectangleImpl* rect = (RectangleImpl*)RectangleImpl::New((Shape*)m_shape);
+        rect->setWidth(defaultWidth);
+        rect->setHeight(defaultHeight);
+    }
 }
 
 bool NodeImpl::isTypeOf(const ObjectType& type) const
@@ -74,26 +88,7 @@ bool NodeImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) cons
     return false;
 }
 
-void NodeImpl::initNodeSize()
-{
-    if (!m_shape) {
-        return;
-    }
-    int defaultWidth = 120;
-    int defaultHeight = 200;
-
-    for (auto subShape : m_shape->getSubShapes()) {
-        if (subShape->getObjectType() == ObjectType::kRectangle) {
-            ((RectangleImpl*)subShape)->setSize(QSize(defaultWidth, defaultHeight));
-            return;
-        }
-    }
-    RectangleImpl* rect = (RectangleImpl*)RectangleImpl::New((Shape*)m_shape);
-    rect->setWidth(defaultWidth);
-    rect->setHeight(defaultHeight);
-}
-
-QSize NodeImpl::getSize() const
+QSizeF NodeImpl::getSize() const
 {
     auto parent = getParent();
     if (!parent) {
@@ -110,7 +105,7 @@ QSize NodeImpl::getSize() const
     return QSize(0, 0);
 }
 
-void NodeImpl::setSize(const QSize &size)
+void NodeImpl::setSize(const QSizeF &size)
 {
     auto parent = getParent();
     if (!parent) {

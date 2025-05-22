@@ -12,12 +12,10 @@ namespace datamodel {
 
 class Shape;
 
-class MANGO_BD_DATAMODEL_API Elipse : public GObject {
+class MANGO_BD_DATAMODEL_API Ellipse : public GObject {
 public:
-    /// 创建一个新的椭圆对象
-    /// \param parent 父对象
-    /// \return
-    static Elipse* New(Shape* parent);
+    static Ellipse* New(Shape* parent);
+    static Ellipse* New(Shape* parent, double radiusX, double radiusY, const QPointF& center);
 
     /// 设置椭圆的圆心坐标
     /// \param center 圆心坐标

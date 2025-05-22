@@ -15,6 +15,7 @@ class Shape;
 class MANGO_BD_DATAMODEL_API Arc : public GObject {
 public:
     static Arc* New(Shape* parent);
+    static Arc* New(Shape* parent, double radius, const QPointF& center, double startAngle, double spanAngle);
 
     /// 设置圆心坐标
     /// \param center 圆心坐标

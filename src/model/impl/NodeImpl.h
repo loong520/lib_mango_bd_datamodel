@@ -18,9 +18,9 @@ class BDRTree;
 
 class NodeImpl : public GraphElementImpl {
 public:
-    static Node* New(Node *parent);
+    static Node* New(Node *parent, bool isHierarchical = false, bool isRoot = false);
 
-    NodeImpl(Object* parent = nullptr);
+    NodeImpl(Object* parent = nullptr, bool isHierarchical = false, bool isRoot = false);
 
     ObjectType getObjectType() const override { return ObjectType::kNode; }
     bool isTypeOf(const ObjectType& type) const override;
@@ -31,14 +31,12 @@ public:
     bool hitTest(const QPointF &aPosition, int aAccuracy = 0) const override;
     bool hitTest(const QRectF &aRect, bool aContained, int aAccuracy = 0) const override;
 
-    void initNodeSize();
-
-    bool isRootNode() const { return getParent() == nullptr; }
-    bool isHierarchical() const { return m_subNodes.size() > 0; }
+    bool isRootNode() const { return m_isRoot; }
+    bool isHierarchical() const { return m_isHierarchical; }
 
     // node大小
-    QSize getSize() const;
-    void setSize(const QSize &size);
+    QSizeF getSize() const;
+    void setSize(const QSizeF &size);
 
     // 子图元（node下的所有图元）
     void addGraphElement(GObjectImpl *element);
@@ -74,6 +72,8 @@ public:
     QList<GObjectImpl *> items(const QRectF &rect) const;
 
 public:
+    bool m_isRoot = false;                  // 根节点
+    bool m_isHierarchical = false;          // 层次节点
     QList<NodeImpl*> m_subNodes;            // 内部的子node
     QList<PinImpl*>  m_independentPins;     // 内部的子pin
     QList<PinImpl*>  m_devicePins;          // node or symbol边界上的pin

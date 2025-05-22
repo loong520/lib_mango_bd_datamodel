@@ -16,7 +16,7 @@ namespace
     XX(kObject, "Object") \
     XX(kGObject, "GObject") \
     XX(kRectangle, "Rectangle") \
-    XX(kElipse, "Elipse")   \
+    XX(kEllipse, "Ellipse")   \
     XX(kPolygon, "Polygon") \
     XX(kPolyline, "Polyline") \
     XX(kArc, "Arc") \
