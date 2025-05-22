@@ -45,22 +45,28 @@ void Node::removeGraphElement(GraphElement *graphElement)
 
 QList<GraphElement*> Node::getGraphElements() const
 {
-    QList<GraphElement*> elements;
-    for (auto element : impl_ptr(Node)->getGraphElements()) {
-        elements.append((GraphElement*)element);
+    auto &&elements = impl_ptr(Node)->getGraphElements();
+
+    QList<GraphElement*> retElements;
+    retElements.reserve(elements.size());
+    for (auto element : elements) {
+        retElements.append((GraphElement*)element);
     }
-    return elements;
+    return retElements;
 }
 
 QList<GraphElement*> Node::getGraphElements(ObjectType type) const
 {
-    QList<GraphElement*> elements;
-    for (auto element : impl_ptr(Node)->getGraphElements()) {
+    auto &&elements = impl_ptr(Node)->getGraphElements();
+
+    QList<GraphElement*> retElements;
+    retElements.reserve(elements.size());
+    for (auto element : elements) {
         if (element->isTypeOf(type)) {
-            elements.append((GraphElement*)element);
+            retElements.append((GraphElement*)element);
         }
     }
-    return elements;
+    return retElements;
 }
 
 void Node::addSubNode(Node *node)
@@ -75,11 +81,14 @@ void Node::removeSubNode(Node *node)
 
 QList<Node*> Node::getSubNodes() const
 {
-    QList<Node*> nodes;
-    for (auto node : impl_ptr(Node)->getSubNodes()) {
-        nodes.append((Node*)node);
+    auto &&nodes = impl_ptr(Node)->getSubNodes();
+
+    QList<Node*> retNodes;
+    retNodes.reserve(nodes.size());
+    for (auto node : nodes) {
+        retNodes.append((Node*)node);
     }
-    return nodes;
+    return retNodes;
 }
 
 void Node::addIndependentPin(Pin *pin)
@@ -94,11 +103,14 @@ void Node::removeIndependentPin(Pin *pin)
 
 QList<Pin*> Node::getIndependentPin() const
 {
-    QList<Pin*> pins;
-    for (auto pin : impl_ptr(Node)->getIndependentPin()) {
-        pins.append((Pin*)pin);
+    auto &&pins = impl_ptr(Node)->getIndependentPin();
+
+    QList<Pin*> retPins;
+    retPins.reserve(pins.size());
+    for (auto pin : pins) {
+        retPins.append((Pin*)pin);
     }
-    return pins;
+    return retPins;
 }
 
 void Node::addDevicePin(Pin *pin)
@@ -113,11 +125,14 @@ void Node::removeDevicePin(Pin *pin)
 
 QList<Pin*> Node::getDevicePins() const
 {
-    QList<Pin*> pins;
-    for (auto pin : impl_ptr(Node)->getDevicePins()) {
-        pins.append((Pin*)pin);
+    auto &&pins = impl_ptr(Node)->getDevicePins();
+
+    QList<Pin*> retPins;
+    retPins.reserve(pins.size());
+    for (auto pin : pins) {
+        retPins.append((Pin*)pin);
     }
-    return pins;
+    return retPins;
 }
 
 void Node::addNet(Net *net)
@@ -132,27 +147,36 @@ void Node::removeNet(Net *net)
 
 QList<Net*> Node::getNets() const
 {
-    QList<Net*> nets;
-    for (auto net : impl_ptr(Node)->getNets()) {
-        nets.append((Net*)net);
+    auto &&nets = impl_ptr(Node)->getNets();
+
+    QList<Net*> retNets;
+    retNets.reserve(nets.size());
+    for (auto net : nets) {
+        retNets.append((Net*)net);
     }
-    return nets;
+    return retNets;
 }
 
 QList<GObject *> Node::items(const QPointF &pos) const
 {
-    QList<GObject *> items;
-    for (auto item : impl_ptr(Node)->items(pos)) {
-        items.append((GObject*)item);
+    auto &&items = impl_ptr(Node)->items(pos);
+
+    QList<GObject *> retItems;
+    retItems.reserve(items.size());
+    for (auto item : items) {
+        retItems.append((GObject*)item);
     }
-    return items;
+    return retItems;
 }
 
 QList<GObject *> Node::items(const QRectF &rect) const
 {
-    QList<GObject *> items;
-    for (auto item : impl_ptr(Node)->items(rect)) {
-        items.append((GObject*)item);
+    auto &&items = impl_ptr(Node)->items(rect);
+
+    QList<GObject *> retItems;
+    retItems.reserve(items.size());
+    for (auto item : items) {
+        retItems.append((GObject*)item);
     }
-    return items;
+    return retItems;
 }
