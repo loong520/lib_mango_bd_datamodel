@@ -6,23 +6,19 @@
 #include "NodeImpl.h"
 #include "PinImpl.h"
 #include "ShapeImpl.h"
+#include <QSet>
 
 using namespace mango::blockdiagram::datamodel;
 
-Symbol *SymbolImpl::New(Node *parent)
+Symbol *SymbolImpl::New(Node *parent, LibSymbolImpl *libSymbol)
 {
     if (parent == nullptr) {
         // TODO: LOG_WARN
         return nullptr;
     }
-    SymbolImpl* impl = new SymbolImpl((Object*)parent);
+    SymbolImpl* impl = new SymbolImpl(libSymbol, (Object*)parent);
     obj_impl_ptr(Node, parent)->addGraphElement(impl);
     return (Symbol*)impl;
-}
-
-SymbolImpl::SymbolImpl(Object* parent) : GraphElementImpl(parent)
-{
-
 }
 
 bool SymbolImpl::isTypeOf(const ObjectType& type) const
@@ -30,6 +26,7 @@ bool SymbolImpl::isTypeOf(const ObjectType& type) const
     auto typeId = type.getType();
     if (typeId == ObjectType::kObject ||
         typeId == ObjectType::kGObject ||
+        typeId == ObjectType::kGraphElement ||
         typeId == ObjectType::kSymbol) {
         return true;
     }
@@ -74,27 +71,72 @@ bool SymbolImpl::hitTest(const QRectF &aRect, bool aContained, int aAccuracy) co
     return false;
 }
 
-void SymbolImpl::addPin(PinImpl* pin)
+void SymbolImpl::setLibSymbol(LibSymbolImpl *aLibSymbol)
 {
-    if (pin == nullptr) {
-        return;
-    }
-    if (m_pins.contains(pin)) {
-        return;
-    }
-    m_pins.append(pin);
-    pin->setParent((Object*)this);
+    m_libSymbol = aLibSymbol;
+
+    updatePins();
 }
 
-void SymbolImpl::removePin(PinImpl* pin)
+void SymbolImpl::updatePins()
 {
-    if (pin == nullptr) {
+    QHash<QString, PinImpl*> pinNameMap;
+    QSet<PinImpl*>           unassignedSchPins;
+    QSet<PinImpl*>           unassignedLibPins;
+
+    for (auto pin : m_pins) {
+        pinNameMap[pin->getName()] = pin;
+        unassignedSchPins.insert(pin);
+        //pin->setLibPin(nullptr);
+    }
+    m_pinMap.clear();
+    if (!m_libSymbol) {
         return;
     }
-    m_pins.removeAll(pin);
-}
+    for (auto libPin : m_libSymbol->getPins()) {
+        PinImpl* pin = nullptr;
 
-QList<PinImpl*> SymbolImpl::getPins() const
-{
-    return m_pins;
+        auto it = pinNameMap.find(libPin->getName()); // 使用pin的名字匹配
+        if (it != pinNameMap.end()) {
+            unassignedLibPins.insert(libPin);
+            continue;
+        }
+        pin = *it;
+        pinNameMap.erase(it);
+        pin->setLibPin(libPin);
+        pin->setPos(libPin->getPos());
+
+        unassignedSchPins.erase(pin);
+        m_pinMap[libPin] = pin;
+    }
+
+    // 添加库符号中未没有匹配到的引脚
+    for (auto libPin : unassignedLibPins) {
+        PinImpl* pin = nullptr;
+
+        // 首先尝试重新使用现有的引脚
+        if (!unassignedSchPins.empty()) {
+            auto it = unassignedSchPins.begin();
+            pin = *it;
+            unassignedSchPins.erase(it);
+        } else {
+            // 这是一个未找到的引脚，所以创建一个新的引脚。
+            pin = PinImpl::New(this, libPin->getName());
+        }
+        m_pinMap[libPin] = pin;
+        pin->setLibPin(libPin);
+        pin->setPos(libPin->getPos());
+        pin->setName(libPin->getName());
+    }
+
+    // 如果符号中还有未匹配到库符号引脚的引脚，则将其移除
+    for (auto it1 = m_pins.begin(); it1 != m_pins.end() && !unassignedSchPins.empty();) {
+        auto it2 = unassignedSchPins.find(*it1);
+        if (it2 != unassignedSchPins.end()) {
+            it1 = m_pins.erase(it1);
+            unassignedSchPins.erase(it2);
+        } else {
+            ++it1;
+        }
+    }
 }

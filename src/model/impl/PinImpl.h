@@ -13,13 +13,14 @@ namespace datamodel {
 class Pin;
 class Node;
 class Symbol;
+class LibSymbol;
 class NetImpl;
 class CompositePin;
 
 class PinImpl : public GraphElementImpl {
 public:
     static Pin* New(Node* parent, const QString& name, bool isDevicePin = true);
-    static Pin* New(Symbol* parent, const QString& name);
+    static Pin* New(LibSymbol* parent, const QString& name);
 
     PinImpl(const QString& name, bool isDevicePin = true, Object* parent = nullptr);
 

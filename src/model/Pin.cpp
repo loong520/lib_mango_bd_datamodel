@@ -12,7 +12,7 @@ Pin* Pin::New(Node* parent, const QString& name, bool devicePin)
     return PinImpl::New(parent, name, devicePin);
 }
 
-Pin* Pin::New(Symbol* parent, const QString& name)
+Pin* Pin::New(LibSymbol* parent, const QString& name)
 {
     return PinImpl::New(parent, name);
 }

@@ -34,11 +34,12 @@ public:
         kCompositePin = 60,     ///< "CompositePin"
         kSymbol = 70,           ///< "Symbol"
         kNet = 80,              ///< "Net"
-        kEdgeSection = 90,      ///< "EdgeSection"
-        kRTree = 100,           ///< "RTree"
-        kStyle = 110,           ///< "Style"
-        kTheme = 120,           ///< "Theme"
-        kStyleManager = 130,    ///< "StyleManager"
+        kLibSymbol = 90,        ///< "LibSymbol"
+        kEdgeSection = 100,     ///< "EdgeSection"
+        kRTree = 110,           ///< "RTree"
+        kStyle = 120,           ///< "Style"
+        kTheme = 130,           ///< "Theme"
+        kStyleManager = 140,    ///< "StyleManager"
 
         kMaxObjectTypes = 200, ///< "kMaxObjectTypes"
     };

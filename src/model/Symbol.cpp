@@ -4,31 +4,39 @@
 
 #include "MangoBDDataModel/model/Symbol.h"
 #include "impl/SymbolImpl.h"
+#include "impl/LibSymbolImpl.h"
 #include "impl/PinImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 
-Symbol *Symbol::New(Node *parent)
+Symbol *Symbol::New(Node *parent, LibSymbol *libSymbol)
 {
-    return SymbolImpl::New(parent);
+    return SymbolImpl::New(parent, (LibSymbolImpl*)libSymbol);
 }
 
-void Symbol::addPin(Pin* pin)
+void Symbol::setLibSymbol(LibSymbol *aLibSymbol)
 {
-    impl_ptr(Symbol)->addPin((PinImpl*)pin);
+    impl_ptr(Symbol)->setLibSymbol((LibSymbolImpl*)aLibSymbol);
 }
 
-void Symbol::removePin(Pin* pin)
+LibSymbol *Symbol::getLibSymbol() const
 {
-    impl_ptr(Symbol)->removePin((PinImpl*)pin);
+    return (LibSymbol*)impl_ptr(Symbol)->getLibSymbol();
 }
 
 QList<Pin*> Symbol::getPins() const
 {
-    /// 可能影响性能，后面修改为不要转换
-    QList<Pin*> pins;
-    for (auto pin : impl_ptr(Symbol)->getPins()) {
-        pins.append((Pin*)pin);
+    auto &&pins = impl_ptr(Symbol)->getPins();
+
+    QList<Pin*> retPins;
+    retPins.reserve(pins.size());
+    for (auto pin : pins) {
+        retPins.append((Pin*)pin);
     }
-    return pins;
+    return retPins;
+}
+
+void Symbol::updatePins()
+{
+    impl_ptr(Symbol)->updatePins();
 }

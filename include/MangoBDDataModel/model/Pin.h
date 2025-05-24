@@ -11,7 +11,7 @@ namespace blockdiagram {
 namespace datamodel {
 
 class Node;
-class Symbol;
+class LibSymbol;
 class Net;
 
 class MANGO_BD_DATAMODEL_API Pin : public GraphElement {
@@ -23,9 +23,9 @@ public:
     static Pin* New(Node* parent, const QString& name, bool devicePin = true);
 
     /// 创建一个新的引脚对象
-    /// \param parent 父symbol
+    /// \param parent 父库符号
     /// \param name 引脚名称
-    static Pin* New(Symbol* parent, const QString& name);
+    static Pin* New(LibSymbol* parent, const QString& name);
 
     /// 设置引脚名称
     /// \param name

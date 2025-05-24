@@ -5,6 +5,7 @@
 #include "PinImpl.h"
 #include "NodeImpl.h"
 #include "SymbolImpl.h"
+#include "LibSymbolImpl.h"
 #include "LabelImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
@@ -25,15 +26,14 @@ Pin* PinImpl::New(Node* parent, const QString& name, bool isDevicePin)
     return (Pin*)impl;
 }
 
-Pin* PinImpl::New(Symbol* parent, const QString& name)
+Pin* PinImpl::New(LibSymbol* parent, const QString& name)
 {
     if (parent == nullptr) {
         // TODO: LOG_WARN
         return nullptr;
     }
-    PinImpl* impl = new PinImpl(name, false, (Object*)parent);
-
-    obj_impl_ptr(Symbol, parent)->addPin(impl);
+    PinImpl* impl = new PinImpl(name, true, (Object*)parent);
+    obj_impl_ptr(LibSymbol, parent)->addPin(impl);
     return (Pin*)impl;
 }
 
