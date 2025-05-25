@@ -4,7 +4,6 @@
 
 #include "ObjectImpl.h"
 #include "PropertyImpl.h"
-#include "MangoBDDataModel/base/PropertyDef.h"
 
 using namespace mango::blockdiagram::datamodel;
 
@@ -12,6 +11,25 @@ ObjectImpl::ObjectImpl(Object *parent)
     : m_parent(parent), m_props(nullptr)
 {
     // todo: ObjectStore::getInstance().addObject((Object*)this);
+}
+
+ObjectImpl::ObjectImpl(const ObjectImpl &other)
+{
+    m_parent = other.m_parent;
+    if (m_props) {
+        auto it = m_props->begin();
+        while (it!= m_props->end()) {
+            PropertyImpl* impl = it.value();
+            PropertyImpl* newImpl = new PropertyImpl(*impl);
+            m_props->insert(it.key(), newImpl);
+            ++it;
+        }
+    }
+}
+
+ObjectImpl* ObjectImpl::clone() const
+{
+    return new ObjectImpl(*this);
 }
 
 ObjectImpl::~ObjectImpl()
@@ -63,7 +81,7 @@ bool ObjectImpl::hasProperty() const
     return m_props && !m_props->isEmpty();
 }
 
-void ObjectImpl::addProperty(Property *property)
+void ObjectImpl::addProperty(PropertyImpl *property)
 {
     if (property == nullptr ||
         property->getOwner() != (Object*)this ||
@@ -71,18 +89,13 @@ void ObjectImpl::addProperty(Property *property)
         return;
     }
     // 检查属性是否重复添加
-    Property* oldProp = findProperty(property->getName());
+    PropertyImpl* oldProp = findProperty(property->getName());
     if (oldProp == property) {
         return;
     }
 
-    // 增加该属性的使用计数
-    PropertyDef* def = property->getPropertyDef();
-    if (def) {
-        def->incUseCount(1);
-    }
     if (m_props == nullptr) {
-        m_props = new QMap<QString, Property*>();
+        m_props = new QMap<QString, PropertyImpl*>();
     }
     m_props->insert(property->getName(), property);
 }
@@ -95,19 +108,13 @@ void ObjectImpl::deleteProperty(const QString& name)
 
     auto it = m_props->find(name);
     if (it != m_props->end()) {
-        PropertyImpl* impl = (PropertyImpl*)it.value();
-
-        PropertyDef* def = impl->getPropertyDef();
-        if (def) {
-            def->incUseCount(-1);
-        }
-
+        PropertyImpl* impl = it.value();
         delete impl;
         m_props->erase(it);
     }
 }
 
-Property *ObjectImpl::findProperty(const QString &name) const
+PropertyImpl *ObjectImpl::findProperty(const QString &name) const
 {
     if (m_props == nullptr) {
         return nullptr;
@@ -115,10 +122,10 @@ Property *ObjectImpl::findProperty(const QString &name) const
     return m_props->value(name, nullptr);
 }
 
-QList<Property *> ObjectImpl::getProperties() const
+QList<PropertyImpl *> ObjectImpl::getProperties() const
 {
     if (m_props == nullptr) {
-        return QList<Property *>();
+        return QList<PropertyImpl *>();
     }
     return m_props->values();
 }

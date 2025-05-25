@@ -10,7 +10,7 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Pin* PinImpl::New(Node* parent, const QString& name, bool isDevicePin)
+PinImpl* PinImpl::New(NodeImpl* parent, const QString& name, bool isDevicePin)
 {
     if (parent == nullptr) {
         // TODO: LOG_WARN
@@ -19,22 +19,33 @@ Pin* PinImpl::New(Node* parent, const QString& name, bool isDevicePin)
     PinImpl* impl = new PinImpl(name, isDevicePin, (Object*)parent);
 
     if (isDevicePin) {
-        obj_impl_ptr(Node, parent)->addDevicePin(impl);
+        parent->addDevicePin(impl);
     } else {
-        obj_impl_ptr(Node, parent)->addIndependentPin(impl);
+        parent->addIndependentPin(impl);
     }
-    return (Pin*)impl;
+    return impl;
 }
 
-Pin* PinImpl::New(LibSymbol* parent, const QString& name)
+PinImpl* PinImpl::New(LibSymbolImpl* parent, const QString& name)
 {
     if (parent == nullptr) {
         // TODO: LOG_WARN
         return nullptr;
     }
     PinImpl* impl = new PinImpl(name, true, (Object*)parent);
-    obj_impl_ptr(LibSymbol, parent)->addPin(impl);
-    return (Pin*)impl;
+    parent->addPin(impl);
+    return impl;
+}
+
+PinImpl* PinImpl::New(SymbolImpl* parent, const QString& name)
+{
+    if (parent == nullptr) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PinImpl* impl = new PinImpl(name, true, (Object*)parent);
+    parent->addPin(impl);
+    return impl;
 }
 
 PinImpl::PinImpl(const QString& name, bool isDevicePin, Object* parent) : GraphElementImpl(parent)
@@ -45,6 +56,23 @@ PinImpl::PinImpl(const QString& name, bool isDevicePin, Object* parent) : GraphE
     addLabel(label);
 
     m_isDevicePin = isDevicePin;
+}
+
+PinImpl::PinImpl(const PinImpl &other) : GraphElementImpl(other)
+{
+    m_incomingNets = other.m_incomingNets;
+    m_outgoingNets = other.m_outgoingNets;
+
+    m_shapeType = other.m_shapeType;
+    m_direction = other.m_direction;
+    m_isDevicePin = other.m_isDevicePin;
+    m_compositePin = other.m_compositePin;
+    m_libPin = other.m_libPin;
+}
+
+PinImpl* PinImpl::clone() const
+{
+    return new PinImpl(*this);
 }
 
 bool PinImpl::isTypeOf(const ObjectType& type) const
@@ -66,6 +94,9 @@ void PinImpl::Delete()
 
 QRectF PinImpl::getBoundingRect() const
 {
+    if (m_libPin) {
+        return m_libPin->getBoundingRect();
+    }
     return getBoundingRect();
 }
 
@@ -89,11 +120,22 @@ void PinImpl::setName(const QString& name)
 
 QString PinImpl::getName() const
 {
+    if (m_libPin) {
+        return m_libPin->getName();
+    }
     auto nameLabel = GraphElementImpl::findMainName(this);
     if (nameLabel) {
         return nameLabel->getText();
     }
     return "";
+}
+
+ShapeImpl *PinImpl::getShape() const
+{
+    if (m_libPin) {
+        return m_libPin->getShape();
+    }
+    return m_shape;
 }
 
 void PinImpl::addIncomingNet(NetImpl* net)
@@ -150,6 +192,9 @@ QList<NetImpl*> PinImpl::getOutgoingNets() const
 
 void PinImpl::setShapeType(PinShape shapeType)
 {
+    if (m_shapeType == shapeType) {
+        return;
+    }
     m_shapeType = shapeType;
 
     // todo: 更新shape数据
@@ -157,15 +202,24 @@ void PinImpl::setShapeType(PinShape shapeType)
 
 PinShape PinImpl::getShapeType() const
 {
+    if (m_libPin) {
+        return m_libPin->getShapeType();
+    }
     return m_shapeType;
 }
 
 void PinImpl::setDirection(Direction direction)
 {
+    if (m_direction == direction) {
+        return;
+    }
     m_direction = direction;
 }
 
 Direction PinImpl::getDirection() const
 {
+    if (m_libPin) {
+        return m_libPin->getDirection();
+    }
     return m_direction;
 }

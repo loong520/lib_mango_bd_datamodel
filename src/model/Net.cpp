@@ -9,7 +9,7 @@ using namespace mango::blockdiagram::datamodel;
 
 Net* Net::New(Node* parent)
 {
-    return NetImpl::New(parent);
+    return (Net*)NetImpl::New((NodeImpl*)parent);
 }
 
 void Net::addSource(Pin* pin)

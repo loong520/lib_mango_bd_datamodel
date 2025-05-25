@@ -9,12 +9,12 @@ using namespace mango::blockdiagram::datamodel;
 
 Polygon* Polygon::New(Shape* parent)
 {
-    return PolygonImpl::New(parent);
+    return (Polygon*)PolygonImpl::New((ShapeImpl*)parent);
 }
 
 Polygon* Polygon::New(Shape* parent, const QList<QPointF> &v)
 {
-    return PolygonImpl::New(parent, v);
+    return (Polygon*)PolygonImpl::New((ShapeImpl*)parent, v);
 }
 
 QPolygonF Polygon::toQPolygon() const

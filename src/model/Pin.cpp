@@ -9,12 +9,12 @@ using namespace mango::blockdiagram::datamodel;
 
 Pin* Pin::New(Node* parent, const QString& name, bool devicePin)
 {
-    return PinImpl::New(parent, name, devicePin);
+    return (Pin*)PinImpl::New((NodeImpl*)parent, name, devicePin);
 }
 
 Pin* Pin::New(LibSymbol* parent, const QString& name)
 {
-    return PinImpl::New(parent, name);
+    return (Pin*)PinImpl::New((LibSymbolImpl*)parent, name);
 }
 
 void Pin::setName(const QString& name)

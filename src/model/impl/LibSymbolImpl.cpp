@@ -9,20 +9,29 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-LibSymbol *LibSymbolImpl::New(Node *parent)
+LibSymbolImpl *LibSymbolImpl::New(NodeImpl *parent)
 {
     if (parent == nullptr) {
         // TODO: LOG_WARN
         return nullptr;
     }
     LibSymbolImpl* impl = new LibSymbolImpl((Object*)parent);
-    obj_impl_ptr(Node, parent)->addGraphElement(impl);
-    return (LibSymbol*)impl;
+    parent->addGraphElement(impl);
+    return impl;
 }
 
-LibSymbolImpl::LibSymbolImpl(Object* parent) : GraphElementImpl(parent)
+LibSymbolImpl::LibSymbolImpl(const LibSymbolImpl& other) : GraphElementImpl(other)
 {
+    m_pins.reserve(other.m_pins.size());
+    for (auto pin : other.m_pins) {
+        PinImpl* newPin = pin->clone();
+        m_pins.append(newPin);
+    }
+}
 
+LibSymbolImpl* LibSymbolImpl::clone() const
+{
+    return new LibSymbolImpl(*this);
 }
 
 bool LibSymbolImpl::isTypeOf(const ObjectType& type) const

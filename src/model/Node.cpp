@@ -4,13 +4,12 @@
 
 #include "MangoBDDataModel/model/Node.h"
 #include "impl/NodeImpl.h"
-#include "impl/PinImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 
 Node* Node::New(Node* parent, bool isHierarchical, bool isRoot)
 {
-    return NodeImpl::New(parent, isHierarchical, isRoot);
+    return (Node*)NodeImpl::New((NodeImpl*)parent, isHierarchical, isRoot);
 }
 
 QSizeF Node::getSize() const

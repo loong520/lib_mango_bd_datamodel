@@ -30,7 +30,7 @@ aux_source_directory(src/model DIR_SRC)
 aux_source_directory(src/model/impl DIR_SRC)
 aux_source_directory(src/style DIR_SRC)
 aux_source_directory(src/style/impl DIR_SRC)
-aux_source_directory(src/utils DIR_SRC)
+aux_source_directory(src/util DIR_SRC)
 
 # 编译选项配置
 if (CMAKE_HOST_WIN32)
@@ -44,6 +44,9 @@ add_library(
     SHARED
     ${DIR_SRC}
     ${DIR_INC}
+        include/MangoBDDataModel/base/EnumTypes.h
+        src/util/Util.cpp
+        include/MangoBDDataModel/util/Util.h
 )
 
 #链接Qt5动态库

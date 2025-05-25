@@ -10,18 +10,19 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class Polyline;
-class Shape;
+class ShapeImpl;
 
 class PolylineImpl : public GObjectImpl, QList<QPointF> {
 public:
-    static Polyline* New(Shape* parent);
-    static Polyline* New(Shape* parent, const QList<QPointF> &v);
+    static PolylineImpl* New(ShapeImpl* parent);
+    static PolylineImpl* New(ShapeImpl* parent, const QList<QPointF> &v);
 
     PolylineImpl(const QList<QPointF> &v, Object* parent = nullptr)
-        : GObjectImpl(parent), m_points(v)
+        : GObjectImpl(parent), QList<QPointF>(v)
     {
     }
+    PolylineImpl(const PolylineImpl &other);
+    PolylineImpl* clone() const override;
 
     ObjectType getObjectType() const override { return ObjectType::kPolyline; }
     bool isTypeOf(const ObjectType& type) const override;
@@ -53,9 +54,6 @@ public:
     void removeFirst();
     void removeLast();
     void clear();
-
-public:
-    QList<QPointF> m_points;
 };
 
 }

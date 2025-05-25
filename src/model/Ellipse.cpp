@@ -9,12 +9,12 @@ using namespace mango::blockdiagram::datamodel;
 
 Ellipse* Ellipse::New(Shape* parent)
 {
-    return EllipseImpl::New(parent);
+    return (Ellipse*)EllipseImpl::New((ShapeImpl*)parent);
 }
 
 Ellipse* Ellipse::New(Shape* parent, double radiusX, double radiusY, const QPointF& center)
 {
-    return EllipseImpl::New(parent, radiusX, radiusY, center);
+    return (Ellipse*)EllipseImpl::New((ShapeImpl*)parent, radiusX, radiusY, center);
 }
 
 void Ellipse::setCenter(const QPointF& center)

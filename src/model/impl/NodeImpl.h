@@ -11,16 +11,17 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class NodeImpl;
 class PinImpl;
 class NetImpl;
 class BDRTree;
 
 class NodeImpl : public GraphElementImpl {
 public:
-    static Node* New(Node *parent, bool isHierarchical = false, bool isRoot = false);
+    static NodeImpl* New(NodeImpl *parent, bool isHierarchical = false, bool isRoot = false);
 
     NodeImpl(Object* parent = nullptr, bool isHierarchical = false, bool isRoot = false);
+    NodeImpl(const NodeImpl& other);
+    NodeImpl* clone() const override;
 
     ObjectType getObjectType() const override { return ObjectType::kNode; }
     bool isTypeOf(const ObjectType& type) const override;

@@ -50,7 +50,7 @@ bool Object::hasProperty() const
 
 void Object::addProperty(Property *property)
 {
-    impl_ptr(Object)->addProperty(property);
+    impl_ptr(Object)->addProperty((PropertyImpl*)property);
 }
 
 void Object::deleteProperty(const QString& name)
@@ -60,10 +60,16 @@ void Object::deleteProperty(const QString& name)
 
 Property *Object::findProperty(const QString &name) const
 {
-    return impl_ptr(Object)->findProperty(name);
+    return (Property*)impl_ptr(Object)->findProperty(name);
 }
 
 QList<Property *> Object::getProperties() const
 {
-    return impl_ptr(Object)->getProperties();
+    auto &&properties = impl_ptr(Object)->getProperties();
+    QList<Property*> retProperties;
+    retProperties.reserve(properties.size());
+    for (auto property : properties) {
+        retProperties.append((Property*)property);
+    }
+    return retProperties;
 }

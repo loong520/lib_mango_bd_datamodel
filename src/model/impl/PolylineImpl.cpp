@@ -7,22 +7,30 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Polyline* PolylineImpl::New(Shape* parent)
+PolylineImpl* PolylineImpl::New(ShapeImpl* parent)
 {
     return New(parent, {});
 }
 
-Polyline* PolylineImpl::New(Shape* parent, const QList<QPointF> &v)
+PolylineImpl* PolylineImpl::New(ShapeImpl* parent, const QList<QPointF> &v)
 {
     if (!parent) {
         // TODO: LOG_WARN
         return nullptr;
     }
     PolylineImpl* impl = new PolylineImpl(v, (Object*)parent);
+    parent->addSubShape((GObjectImpl*)impl);
 
-    obj_impl_ptr(Shape, parent)->addSubShape((GObjectImpl*)impl);
+    return impl;
+}
 
-    return (Polyline*)impl;
+PolylineImpl::PolylineImpl(const PolylineImpl &other) : GObjectImpl(other), QList<QPointF>(other)
+{
+}
+
+PolylineImpl* PolylineImpl::clone() const
+{
+    return new PolylineImpl(*this);
 }
 
 bool PolylineImpl::isTypeOf(const ObjectType& type) const

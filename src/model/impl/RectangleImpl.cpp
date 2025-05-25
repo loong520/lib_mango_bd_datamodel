@@ -7,22 +7,31 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Rectangle* RectangleImpl::New(Shape* parent)
+RectangleImpl* RectangleImpl::New(ShapeImpl* parent)
 {
     return New(parent, {});
 }
 
-Rectangle* RectangleImpl::New(Shape* parent, const QRectF &rect)
+RectangleImpl* RectangleImpl::New(ShapeImpl* parent, const QRectF &rect)
 {
     if (!parent) {
         // TODO: LOG_WARN
         return nullptr;
     }
     RectangleImpl* impl = new RectangleImpl(rect, (Object*)parent);
+    parent->addSubShape((GObjectImpl*)impl);
 
-    obj_impl_ptr(Shape, parent)->addSubShape((GObjectImpl*)impl);
+    return impl;
+}
 
-    return (Rectangle*)impl;
+RectangleImpl::RectangleImpl(const RectangleImpl& other) : GObjectImpl(other)
+{
+    m_rect = other.m_rect;
+}
+
+RectangleImpl* RectangleImpl::clone() const
+{
+    return new RectangleImpl(*this);
 }
 
 bool RectangleImpl::isTypeOf(const ObjectType& type) const

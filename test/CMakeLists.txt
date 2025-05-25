@@ -39,7 +39,7 @@ aux_source_directory(../src/model DIR_SRC)
 aux_source_directory(../src/model/impl DIR_SRC)
 aux_source_directory(../src/style DIR_SRC)
 aux_source_directory(../src/style/impl DIR_SRC)
-aux_source_directory(../src/utils DIR_SRC)
+aux_source_directory(../src/util DIR_SRC)
 
 # 编译选项配置
 if (CMAKE_HOST_WIN32)

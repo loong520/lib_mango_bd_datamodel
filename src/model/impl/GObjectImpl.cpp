@@ -6,6 +6,21 @@
 
 using namespace mango::blockdiagram::datamodel;
 
+GObjectImpl::GObjectImpl(const GObjectImpl &other) : ObjectImpl(other)
+{
+    m_flags = other.m_flags;
+    m_zValue = other.m_zValue;
+    m_pos = other.m_pos;
+    m_transform = other.m_transform;
+    m_sceneTransform = other.m_sceneTransform;
+    m_sceneTransformDirty = other.m_sceneTransformDirty;
+}
+
+GObjectImpl* GObjectImpl::clone() const
+{
+    return new GObjectImpl(*this);
+}
+
 bool GObjectImpl::isTypeOf(const ObjectType& type) const
 {
     auto typeId = type.getType();

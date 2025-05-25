@@ -9,12 +9,12 @@ using namespace mango::blockdiagram::datamodel;
 
 Polyline* Polyline::New(Shape* parent)
 {
-    return PolylineImpl::New(parent);
+    return (Polyline*)PolylineImpl::New((ShapeImpl*)parent);
 }
 
 Polyline* Polyline::New(Shape* parent, const QList<QPointF> &v)
 {
-    return PolylineImpl::New(parent, v);
+    return (Polyline*)PolylineImpl::New((ShapeImpl*)parent, v);
 }
 
 int Polyline::size() const

@@ -10,18 +10,19 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class Arc;
-class Shape;
+class ShapeImpl;
 
 class ArcImpl : public GObjectImpl {
 public:
-    static Arc* New(Shape* parent);
-    static Arc* New(Shape* parent, double radius, const QPointF& center, double startAngle, double spanAngle);
+    static ArcImpl* New(ShapeImpl* parent);
+    static ArcImpl* New(ShapeImpl* parent, double radius, const QPointF& center, double startAngle, double spanAngle);
 
     ArcImpl(double radius, const QPointF& center, double startAngle, double spanAngle, Object* parent = nullptr)
         : GObjectImpl(parent), m_radius(radius), m_center(center), m_startAngle(startAngle), m_spanAngle(spanAngle)
     {
     }
+    ArcImpl(const ArcImpl &other);
+    ArcImpl* clone() const override;
 
     ObjectType getObjectType() const override { return ObjectType::kArc; }
     bool isTypeOf(const ObjectType& type) const override;

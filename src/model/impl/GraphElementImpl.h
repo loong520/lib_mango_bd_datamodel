@@ -11,15 +11,16 @@ namespace blockdiagram {
 namespace datamodel {
 
 class LabelImpl;
-class Node;
-class GraphElement;
+class NodeImpl;
 class ShapeImpl;
 
 class GraphElementImpl : public GObjectImpl {
 public:
-    static GraphElement* New(Node* parent);
+    static GraphElementImpl* New(NodeImpl* parent);
 
     GraphElementImpl(Object* parent = nullptr);
+    GraphElementImpl(const GraphElementImpl &other);
+    GraphElementImpl* clone() const override;
 
     ObjectType getObjectType() const override { return ObjectType::kGraphElement; }
     bool isTypeOf(const ObjectType& type) const override;

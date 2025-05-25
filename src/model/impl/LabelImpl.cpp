@@ -6,20 +6,27 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Label* LabelImpl::New(GraphElement* parent)
+LabelImpl* LabelImpl::New(GraphElementImpl* parent)
 {
     if (parent == nullptr) {
         // TODO: LOG_WARN
         return nullptr;
     }
     LabelImpl* impl = new LabelImpl((Object*)parent);
-    obj_impl_ptr(GraphElement, parent)->addLabel(impl);
+    parent->addLabel(impl);
 
-    return (Label*)impl;
+    return impl;
 }
 
-LabelImpl::LabelImpl(Object* parent) : GraphElementImpl(parent)
+LabelImpl::LabelImpl(const LabelImpl& other) : GraphElementImpl(other)
 {
+    m_text = other.m_text;
+    m_type = other.m_type;
+}
+
+LabelImpl* LabelImpl::clone() const
+{
+    return new LabelImpl(*this);
 }
 
 bool LabelImpl::isTypeOf(const ObjectType& type) const

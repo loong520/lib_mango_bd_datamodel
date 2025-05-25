@@ -10,13 +10,13 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Node* NodeImpl::New(Node *parent, bool isHierarchical, bool isRoot)
+NodeImpl* NodeImpl::New(NodeImpl *parent, bool isHierarchical, bool isRoot)
 {
     NodeImpl* impl = new NodeImpl((Object*)parent, isHierarchical, isRoot);
     if (parent) {
-        obj_impl_ptr(Node, parent)->addSubNode(impl);
+        parent->addSubNode(impl);
     }
-    return (Node*)impl;
+    return impl;
 }
 
 NodeImpl::NodeImpl(Object* parent, bool isHierarchical, bool isRoot)
@@ -32,13 +32,51 @@ NodeImpl::NodeImpl(Object* parent, bool isHierarchical, bool isRoot)
                 return;
             }
         }
-        RectangleImpl* rect = (RectangleImpl*)RectangleImpl::New((Shape*)m_shape);
+        RectangleImpl* rect = RectangleImpl::New(m_shape);
         rect->setWidth(defaultWidth);
         rect->setHeight(defaultHeight);
     }
     if (isRoot) {
         m_size = QSize(2000, 2000); // 根节点的默认大小(画布大小，左上角为原点)
     }
+}
+
+NodeImpl::NodeImpl(const NodeImpl& other) : GraphElementImpl(other)
+{
+    m_isRoot = other.m_isRoot;
+    m_isHierarchical = other.m_isHierarchical;
+    m_size = other.m_size;
+
+    m_subNodes.reserve(other.m_subNodes.size());
+    for (auto subNode : other.m_subNodes) {
+        NodeImpl* newNode = subNode->clone();
+        m_subNodes.append(newNode);
+    }
+
+    m_independentPins.reserve(other.m_independentPins.size());
+    for (auto pin : other.m_independentPins) {
+        PinImpl* newPin = pin->clone();
+        m_independentPins.append(newPin);
+    }
+
+    m_devicePins.reserve(other.m_devicePins.size());
+    for (auto pin : other.m_devicePins) {
+        PinImpl* newPin = pin->clone();
+        m_devicePins.append(newPin);
+    }
+
+    m_nets.reserve(other.m_nets.size());
+    for (auto net : other.m_nets) {
+        NetImpl* newNet = net->clone();
+        m_nets.append(newNet);
+    }
+
+    m_rtree = other.m_rtree;
+}
+
+NodeImpl* NodeImpl::clone() const
+{
+    return new NodeImpl(*this);
 }
 
 bool NodeImpl::isTypeOf(const ObjectType& type) const
@@ -95,7 +133,7 @@ QSizeF NodeImpl::getSize() const
 {
     auto parent = getParent();
     if (!parent) {
-        return QSize(0, 0);
+        return m_size;
     }
     auto parentType = parent->getObjectType();
     if (parentType == ObjectType::kNode) {
@@ -112,6 +150,7 @@ void NodeImpl::setSize(const QSizeF &size)
 {
     auto parent = getParent();
     if (!parent) {
+        m_size = size;
         return;
     }
 

@@ -12,18 +12,18 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class Node;
-class Symbol;
 class LibSymbolImpl;
 class PinImpl;
 
 class SymbolImpl : public GraphElementImpl {
 public:
-    static Symbol *New(Node *parent, LibSymbolImpl *libSymbol);
+    static SymbolImpl *New(NodeImpl *parent, LibSymbolImpl *libSymbol);
 
     SymbolImpl(LibSymbolImpl *libSymbol, Object* parent = nullptr)
         : GraphElementImpl(parent), m_libSymbol(libSymbol)
     {}
+    SymbolImpl(const SymbolImpl &other);
+    SymbolImpl* clone() const override;
 
     ObjectType getObjectType() const override { return ObjectType::kSymbol; }
     bool isTypeOf(const ObjectType& type) const override;
@@ -34,16 +34,19 @@ public:
     bool hitTest(const QPointF &aPosition, int aAccuracy = 0) const override;
     bool hitTest(const QRectF &aRect, bool aContained, int aAccuracy = 0) const override;
 
+    // 库符号
     void setLibSymbol(LibSymbolImpl *aLibSymbol);
     LibSymbolImpl *getLibSymbol() const { return m_libSymbol; }
 
+    void addPin(PinImpl* pin);
+    void removePin(PinImpl* pin);
     QList<PinImpl*> getPins() const { return m_pins; }
     void updatePins();
 
 public:
-    LibSymbolImpl* m_libSymbol = nullptr;   ///< 库符号对象指针
-    QList<PinImpl*> m_pins;                 ///< 每个 PIN 对应一个LibSymbol的PIN
-    QHash<PinImpl*, PinImpl*> m_pinMap;     ///< LibSymbol的pin指针 : Symbol的pin指针
+    LibSymbolImpl* m_libSymbol = nullptr;   // 库符号对象指针
+    QList<PinImpl*> m_pins;                 // 每个 PIN 对应一个LibSymbol的PIN
+    QHash<PinImpl*, PinImpl*> m_pinMap;     // LibSymbol的pin指针 : Symbol的pin指针
 };
 
 }

@@ -11,13 +11,14 @@ namespace blockdiagram {
 namespace datamodel {
 
 class PinImpl;
-class Net;
 
 class NetImpl : public GraphElementImpl {
 public:
-    static Net* New(Node* parent);
+    static NetImpl* New(NodeImpl* parent);
 
-    NetImpl(Object* parent = nullptr);
+    NetImpl(Object* parent = nullptr) : GraphElementImpl(parent) {}
+    NetImpl(const NetImpl &other);
+    NetImpl* clone() const override;
 
     // 命中测试
     bool hitTest(const QPointF &aPosition, int aAccuracy = 0) const override;

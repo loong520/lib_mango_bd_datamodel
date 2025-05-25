@@ -4,13 +4,12 @@
 
 #include "MangoBDDataModel/model/Label.h"
 #include "impl/LabelImpl.h"
-#include "impl/GraphElementImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 
 Label* Label::New(GraphElement* parent)
 {
-    return LabelImpl::New(parent);
+    return (Label*)LabelImpl::New((GraphElementImpl*)parent);
 }
 
 void Label::setText(const QString& text)

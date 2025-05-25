@@ -9,22 +9,34 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Arc* ArcImpl::New(Shape* parent)
+ArcImpl* ArcImpl::New(ShapeImpl* parent)
 {
     return New(parent, 0.0, {}, 0.0, 0.0);
 }
 
-Arc* ArcImpl::New(Shape* parent, double radius, const QPointF& center, double startAngle, double spanAngle)
+ArcImpl* ArcImpl::New(ShapeImpl* parent, double radius, const QPointF& center, double startAngle, double spanAngle)
 {
     if (!parent) {
         // TODO: LOG_WARN
         return nullptr;
     }
     ArcImpl* impl = new ArcImpl(radius, center, startAngle, spanAngle, (Object*)parent);
+    parent->addSubShape((GObjectImpl*)impl);
 
-    obj_impl_ptr(Shape, parent)->addSubShape((GObjectImpl*)impl);
+    return impl;
+}
 
-    return (Arc*)impl;
+ArcImpl::ArcImpl(const ArcImpl &other) : GObjectImpl(other)
+{
+    m_center = other.m_center;
+    m_radius = other.m_radius;
+    m_startAngle = other.m_startAngle;
+    m_spanAngle = other.m_spanAngle;
+}
+
+ArcImpl* ArcImpl::clone() const
+{
+    return new ArcImpl(*this);
 }
 
 bool ArcImpl::isTypeOf(const ObjectType& type) const

@@ -9,15 +9,15 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class Node;
-class LibSymbol;
 class PinImpl;
 
 class LibSymbolImpl : public GraphElementImpl {
 public:
-    static LibSymbol *New(Node *parent);
+    static LibSymbolImpl *New(NodeImpl *parent);
 
-    LibSymbolImpl(Object* parent = nullptr);
+    LibSymbolImpl(Object* parent = nullptr): GraphElementImpl(parent) {}
+    LibSymbolImpl(const LibSymbolImpl& other);
+    LibSymbolImpl* clone() const override;
 
     ObjectType getObjectType() const override { return ObjectType::kLibSymbol; }
     bool isTypeOf(const ObjectType& type) const override;

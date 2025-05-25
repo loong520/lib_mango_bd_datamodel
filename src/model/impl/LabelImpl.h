@@ -15,9 +15,11 @@ class GraphElement;
 
 class LabelImpl : public GraphElementImpl {
 public:
-    static Label* New(GraphElement* parent);
+    static LabelImpl* New(GraphElementImpl* parent);
 
-    LabelImpl(Object* parent = nullptr);
+    LabelImpl(Object* parent = nullptr) : GraphElementImpl(parent) {}
+    LabelImpl(const LabelImpl& other);
+    LabelImpl* clone() const override;
 
     ObjectType getObjectType() const override { return ObjectType::kLabel; }
     bool isTypeOf(const ObjectType& type) const override;

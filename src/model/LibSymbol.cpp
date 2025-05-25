@@ -4,13 +4,12 @@
 
 #include "MangoBDDataModel/model/LibSymbol.h"
 #include "impl/LibSymbolImpl.h"
-#include "impl/PinImpl.h"
 
 using namespace mango::blockdiagram::datamodel;
 
 LibSymbol *LibSymbol::New(Node *parent)
 {
-    return LibSymbolImpl::New(parent);
+    return (LibSymbol*)LibSymbolImpl::New((NodeImpl*)parent);
 }
 
 void LibSymbol::addPin(Pin* pin)

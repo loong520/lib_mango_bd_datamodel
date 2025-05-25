@@ -10,18 +10,19 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class Rectangle;
-class Shape;
+class ShapeImpl;
 
 class RectangleImpl : public GObjectImpl {
 public:
-    static Rectangle* New(Shape* parent);
-    static Rectangle* New(Shape* parent, const QRectF &rect);
+    static RectangleImpl* New(ShapeImpl* parent);
+    static RectangleImpl* New(ShapeImpl* parent, const QRectF &rect);
 
     RectangleImpl(const QRectF &rect, Object* parent = nullptr)
         : GObjectImpl(parent), m_rect(rect)
     {
     }
+    RectangleImpl(const RectangleImpl& other);
+    RectangleImpl* clone() const override;
 
     ObjectType getObjectType() const override { return ObjectType::kRectangle; }
     bool isTypeOf(const ObjectType& type) const override;

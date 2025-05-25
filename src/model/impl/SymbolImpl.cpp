@@ -10,15 +10,35 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Symbol *SymbolImpl::New(Node *parent, LibSymbolImpl *libSymbol)
+SymbolImpl *SymbolImpl::New(NodeImpl *parent, LibSymbolImpl *libSymbol)
 {
     if (parent == nullptr) {
         // TODO: LOG_WARN
         return nullptr;
     }
     SymbolImpl* impl = new SymbolImpl(libSymbol, (Object*)parent);
-    obj_impl_ptr(Node, parent)->addGraphElement(impl);
-    return (Symbol*)impl;
+    parent->addGraphElement(impl);
+    return impl;
+}
+
+SymbolImpl::SymbolImpl(const SymbolImpl &other) : GraphElementImpl(other)
+{
+    m_libSymbol = other.m_libSymbol;
+
+    if (other.m_pins.size() > 0) {
+        m_pins.reserve(other.m_pins.size());
+        for (auto pin : other.m_pins) {
+            PinImpl* newPin = pin->clone();
+            m_pins.append(newPin);
+        }
+    }
+    // todo : m_pinMap
+    // QHash<PinImpl*, PinImpl*> m_pinMap;     // LibSymbol的pin指针 : Symbol的pin指针
+}
+
+SymbolImpl *SymbolImpl::clone() const
+{
+    return new SymbolImpl(*this);
 }
 
 bool SymbolImpl::isTypeOf(const ObjectType& type) const
@@ -78,6 +98,26 @@ void SymbolImpl::setLibSymbol(LibSymbolImpl *aLibSymbol)
     updatePins();
 }
 
+void SymbolImpl::addPin(PinImpl* pin)
+{
+    if (pin == nullptr) {
+        return;
+    }
+    if (m_pins.contains(pin)) {
+        return;
+    }
+    m_pins.append(pin);
+    pin->setParent((Object*)this);
+}
+
+void SymbolImpl::removePin(PinImpl* pin)
+{
+    if (pin == nullptr) {
+        return;
+    }
+    m_pins.removeAll(pin);
+}
+
 void SymbolImpl::updatePins()
 {
     QHash<QString, PinImpl*> pinNameMap;
@@ -87,7 +127,7 @@ void SymbolImpl::updatePins()
     for (auto pin : m_pins) {
         pinNameMap[pin->getName()] = pin;
         unassignedSchPins.insert(pin);
-        //pin->setLibPin(nullptr);
+        pin->setLibPin(nullptr);
     }
     m_pinMap.clear();
     if (!m_libSymbol) {
@@ -106,7 +146,7 @@ void SymbolImpl::updatePins()
         pin->setLibPin(libPin);
         pin->setPos(libPin->getPos());
 
-        unassignedSchPins.erase(pin);
+        unassignedSchPins.remove(pin);
         m_pinMap[libPin] = pin;
     }
 

@@ -7,19 +7,27 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Net* NetImpl::New(Node* parent)
+NetImpl* NetImpl::New(NodeImpl* parent)
 {
     if (parent == nullptr) {
         // TODO: LOG_WARN
         return nullptr;
     }
     NetImpl* net = new NetImpl((Object*)parent);
-    obj_impl_ptr(Node, parent)->addNet((NetImpl*)net);
-    return (Net*)net;
+    parent->addNet((NetImpl*)net);
+    return net;
 }
 
-NetImpl::NetImpl(Object* parent) : GraphElementImpl(parent)
+NetImpl::NetImpl(const NetImpl &other) : GraphElementImpl(other)
 {
+    m_sources = other.m_sources;
+    m_targets = other.m_targets;
+    m_connectMode = other.m_connectMode;
+}
+
+NetImpl* NetImpl::clone() const
+{
+    return new NetImpl(*this);
 }
 
 bool NetImpl::hitTest(const QPointF &aPosition, int aAccuracy) const

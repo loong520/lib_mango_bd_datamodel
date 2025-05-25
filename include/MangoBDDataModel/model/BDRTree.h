@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "MangoBDDataModel/common/RTree.h"
+#include "MangoBDDataModel/util/RTree.h"
 #include "MangoBDDataModel/model/GObject.h"
 
 #include <set>

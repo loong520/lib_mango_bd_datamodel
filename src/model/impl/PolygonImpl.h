@@ -10,18 +10,19 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class Polygon;
-class Shape;
+class ShapeImpl;
 
 class PolygonImpl : public GObjectImpl, QList<QPointF> {
 public:
-    static Polygon* New(Shape* parent);
-    static Polygon* New(Shape* parent, const QList<QPointF> &v);
+    static PolygonImpl* New(ShapeImpl* parent);
+    static PolygonImpl* New(ShapeImpl* parent, const QList<QPointF> &v);
 
     PolygonImpl(const QList<QPointF> &v, Object* parent = nullptr)
         : GObjectImpl(parent), QList<QPointF>(v)
     {
     }
+    PolygonImpl(const PolygonImpl& other);
+    PolygonImpl* clone() const override;
 
     ObjectType getObjectType() const override { return ObjectType::kPolygon; }
     bool isTypeOf(const ObjectType& type) const override;

@@ -9,12 +9,12 @@ using namespace mango::blockdiagram::datamodel;
 
 Arc* Arc::New(Shape* parent)
 {
-    return ArcImpl::New(parent);
+    return (Arc*)ArcImpl::New((ShapeImpl*)parent);
 }
 
 Arc* Arc::New(Shape* parent, double radius, const QPointF& center, double startAngle, double spanAngle)
 {
-    return ArcImpl::New(parent, radius, center, startAngle, spanAngle);
+    return (Arc*)ArcImpl::New((ShapeImpl*)parent, radius, center, startAngle, spanAngle);
 }
 
 void Arc::setCenter(const QPointF center)

@@ -7,21 +7,33 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Ellipse* EllipseImpl::New(Shape* parent)
+EllipseImpl* EllipseImpl::New(ShapeImpl* parent)
 {
     return New(parent, 0.0, 0.0, {});
 }
 
-Ellipse* EllipseImpl::New(Shape* parent, double radiusX, double radiusY, const QPointF& center)
+EllipseImpl* EllipseImpl::New(ShapeImpl* parent, double radiusX, double radiusY, const QPointF& center)
 {
     if (!parent) {
         // TODO: LOG_WARN
         return nullptr;
     }
     EllipseImpl* impl = new EllipseImpl(radiusX, radiusY, center, (Object*)parent);
-    obj_impl_ptr(Shape, parent)->addSubShape((GObjectImpl*)impl);
+    parent->addSubShape((GObjectImpl*)impl);
 
-    return (Ellipse*)impl;
+    return impl;
+}
+
+EllipseImpl::EllipseImpl(const EllipseImpl &other) : GObjectImpl(other)
+{
+    m_center = other.m_center;
+    m_radiusX = other.m_radiusX;
+    m_radiusY = other.m_radiusY;
+}
+
+EllipseImpl* EllipseImpl::clone() const
+{
+    return new EllipseImpl(*this);
 }
 
 bool EllipseImpl::isTypeOf(const ObjectType &type) const

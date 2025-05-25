@@ -9,7 +9,7 @@ using namespace mango::blockdiagram::datamodel;
 
 Shape *Shape::New(GraphElement *parent)
 {
-    return ShapeImpl::New(parent);
+    return (Shape*)ShapeImpl::New((GraphElementImpl*)parent);
 }
 
 void Shape::addSubShape(GObject *shape)

@@ -10,16 +10,17 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
-class Shape;
-class GraphElement;
+class GraphElementImpl;
 
 class ShapeImpl : public GObjectImpl {
 public:
-    static Shape *New(GraphElement *parent);
+    static ShapeImpl *New(GraphElementImpl *parent);
 
     ShapeImpl(Object* parent = nullptr) : GObjectImpl(parent)
     {
     }
+    ShapeImpl(const ShapeImpl &other);
+    ShapeImpl* clone() const override;
 
     ObjectType getObjectType() const override { return ObjectType::kShape; }
     bool isTypeOf(const ObjectType& type) const override;

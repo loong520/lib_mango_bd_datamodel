@@ -7,16 +7,33 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Shape *ShapeImpl::New(GraphElement *parent)
+ShapeImpl *ShapeImpl::New(GraphElementImpl *parent)
 {
     if (!parent) {
         // TODO: LOG_WARN
         return nullptr;
     }
     ShapeImpl* impl = new ShapeImpl((Object*)parent);
-    obj_impl_ptr(GraphElement, parent)->setShape(impl);
+    parent->setShape(impl);
 
-    return (Shape*)impl;
+    return impl;
+}
+
+ShapeImpl::ShapeImpl(const ShapeImpl &other) : GObjectImpl(other)
+{
+    if (other.m_subShapes.size() > 0) {
+        m_subShapes.reserve(other.m_subShapes.size());
+
+        for (auto subShape : other.m_subShapes) {
+            GObjectImpl* newShape = subShape->clone();
+            m_subShapes.append(newShape);
+        }
+    }
+}
+
+ShapeImpl* ShapeImpl::clone() const
+{
+    return new ShapeImpl(*this);
 }
 
 bool ShapeImpl::isTypeOf(const ObjectType& type) const

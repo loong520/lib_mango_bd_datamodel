@@ -5,6 +5,7 @@
 #pragma once
 
 #include "MangoBDDataModel/base/ObjectType.h"
+#include "MangoBDDataModel/base/EnumTypes.h"
 
 namespace mango {
 namespace blockdiagram {

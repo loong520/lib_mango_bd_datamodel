@@ -9,20 +9,40 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-GraphElement* GraphElementImpl::New(Node* parent)
+GraphElementImpl* GraphElementImpl::New(NodeImpl* parent)
 {
     if (parent == nullptr) {
         // TODO: LOG_WARN
         return nullptr;
     }
     GraphElementImpl* impl = new GraphElementImpl((Object*)parent);
-    obj_impl_ptr(Node, parent)->addGraphElement((GraphElementImpl*)impl);
-    return (GraphElement*)impl;
+    parent->addGraphElement((GraphElementImpl*)impl);
+    return impl;
 }
 
 GraphElementImpl::GraphElementImpl(Object* parent) : GObjectImpl(parent)
 {
-    m_shape = (ShapeImpl*)ShapeImpl::New((GraphElement*)this);
+    m_shape = ShapeImpl::New(this);
+}
+
+GraphElementImpl::GraphElementImpl(const GraphElementImpl &other) : GObjectImpl(other)
+{
+    if (other.m_labels.size() > 0) {
+        m_labels.reserve(other.m_labels.size());
+        for (auto label : other.m_labels) {
+            LabelImpl* newLabel = label->clone();
+            m_labels.append(newLabel);
+        }
+    }
+
+    if (other.m_shape) {
+        m_shape = new ShapeImpl(*other.m_shape);
+    }
+}
+
+GraphElementImpl* GraphElementImpl::clone() const
+{
+    return new GraphElementImpl(*this);
 }
 
 bool GraphElementImpl::isTypeOf(const ObjectType& type) const
@@ -88,11 +108,11 @@ void GraphElementImpl::setName(const QString& name)
     }
 
     // create a new label for main name
-    LabelImpl* label = (LabelImpl*)LabelImpl::New((GraphElement*)this);
+    LabelImpl* label = LabelImpl::New(this);
     label->setType(LabelType::LabelForMainName);
     label->setText(name);
 
-    addLabel((LabelImpl*)label);
+    addLabel(label);
 }
 
 QString GraphElementImpl::getName() const

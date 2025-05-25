@@ -12,9 +12,13 @@ namespace mango {
 namespace blockdiagram {
 namespace datamodel {
 
+class PropertyImpl;
+
 class ObjectImpl {
 public:
     ObjectImpl(Object *parent = nullptr);
+    ObjectImpl(const ObjectImpl &other);
+    virtual ObjectImpl* clone() const;
 
     virtual ~ObjectImpl();
 
@@ -36,17 +40,17 @@ public:
 
     bool hasProperty() const;
 
-    void addProperty(Property* property);
+    void addProperty(PropertyImpl* property);
 
     void deleteProperty(const QString& name);
 
-    Property* findProperty(const QString& name) const;
+    PropertyImpl* findProperty(const QString& name) const;
 
-    QList<Property*> getProperties() const;
+    QList<PropertyImpl*> getProperties() const;
 
 public:
     Object* m_parent = nullptr;
-    QMap<QString, Property*> *m_props = nullptr;
+    QMap<QString, PropertyImpl*> *m_props = nullptr;
 };
 
 } // end of namespace datamodel

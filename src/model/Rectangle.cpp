@@ -9,12 +9,12 @@ using namespace mango::blockdiagram::datamodel;
 
 Rectangle* Rectangle::New(Shape* parent)
 {
-    return RectangleImpl::New(parent);
+    return (Rectangle*)RectangleImpl::New((ShapeImpl*)parent);
 }
 
 Rectangle* Rectangle::New(Shape* parent, const QRectF &rect)
 {
-    return RectangleImpl::New(parent, rect);
+    return (Rectangle*)RectangleImpl::New((ShapeImpl*)parent, rect);
 }
 
 void Rectangle::setRect(const QRectF &rect)

@@ -16,6 +16,8 @@ public:
     GObjectImpl(Object *parent = nullptr) : ObjectImpl(parent)
     {
     }
+    GObjectImpl(const GObjectImpl &other);
+    GObjectImpl* clone() const override;
 
     ObjectType getObjectType() const override { return ObjectType::kGObject; }
     bool isTypeOf(const ObjectType& type) const override;

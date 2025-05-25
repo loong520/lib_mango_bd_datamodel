@@ -11,7 +11,7 @@ using namespace mango::blockdiagram::datamodel;
 
 Symbol *Symbol::New(Node *parent, LibSymbol *libSymbol)
 {
-    return SymbolImpl::New(parent, (LibSymbolImpl*)libSymbol);
+    return (Symbol*)SymbolImpl::New((NodeImpl*)parent, (LibSymbolImpl*)libSymbol);
 }
 
 void Symbol::setLibSymbol(LibSymbol *aLibSymbol)

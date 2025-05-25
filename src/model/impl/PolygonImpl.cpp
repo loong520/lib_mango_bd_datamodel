@@ -7,12 +7,12 @@
 
 using namespace mango::blockdiagram::datamodel;
 
-Polygon* PolygonImpl::New(Shape* parent)
+PolygonImpl* PolygonImpl::New(ShapeImpl* parent)
 {
     return New(parent, {});
 }
 
-Polygon* PolygonImpl::New(Shape* parent, const QList<QPointF> &v)
+PolygonImpl* PolygonImpl::New(ShapeImpl* parent, const QList<QPointF> &v)
 {
     if (!parent) {
         // TODO: LOG_WARN
@@ -23,10 +23,18 @@ Polygon* PolygonImpl::New(Shape* parent, const QList<QPointF> &v)
         return nullptr;
     }
     PolygonImpl* impl = new PolygonImpl(v, (Object*)parent);
+    parent->addSubShape((GObjectImpl*)impl);
 
-    obj_impl_ptr(Shape, parent)->addSubShape((GObjectImpl*)impl);
+    return impl;
+}
 
-    return (Polygon*)impl;
+PolygonImpl::PolygonImpl(const PolygonImpl& other ): GObjectImpl(other), QList<QPointF>(other)
+{
+}
+
+PolygonImpl* PolygonImpl::clone() const
+{
+    return new PolygonImpl(*this);
 }
 
 bool PolygonImpl::isTypeOf(const ObjectType& type) const
