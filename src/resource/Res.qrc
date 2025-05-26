@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>LayeredOptions.ini</file>
+    </qresource>
+</RCC>

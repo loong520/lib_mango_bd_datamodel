@@ -23,6 +23,8 @@ include_directories(include)
 
 # 引入本项目的源文件目录
 aux_source_directory(src DIR_SRC)
+aux_source_directory(src/algorithm DIR_SRC)
+aux_source_directory(src/algorithm/impl DIR_SRC)
 aux_source_directory(src/base DIR_SRC)
 aux_source_directory(src/base/impl DIR_SRC)
 aux_source_directory(src/common DIR_SRC)
