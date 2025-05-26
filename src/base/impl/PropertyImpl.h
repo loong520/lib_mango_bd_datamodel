@@ -14,11 +14,28 @@ namespace datamodel {
 
 class PropertyImpl : public ObjectImpl {
 public:
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, bool value);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, int value);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, double value);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, const char * value);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, const std::string &str);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, ObjectImpl* value);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, const QString& value);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, const QVector<bool> &vb);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, const QVector<int> &vi);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, const QVector<double> &vd);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, const QList<QString>& ls);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, std::initializer_list<bool> il);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, std::initializer_list<int> il);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, std::initializer_list<double> il);
+    static PropertyImpl* New(ObjectImpl* owner, const QString& name, std::initializer_list<const char *> il);
+
     PropertyImpl();
     PropertyImpl(const QString& name, bool value);
     PropertyImpl(const QString& name, int value);
     PropertyImpl(const QString& name, double value);
-    PropertyImpl(const QString& name, const char * value);
+    PropertyImpl(const QString& name, const char *value);
+    PropertyImpl(const QString& name, ObjectImpl *value);
     PropertyImpl(const QString& name, const std::string &str);
     PropertyImpl(const QString& name, const QString& value);
     PropertyImpl(const QString& name, const QVector<bool> &vb);
@@ -36,25 +53,25 @@ public:
     PropertyImpl &operator=(const PropertyImpl &);
     PropertyImpl &operator=(PropertyImpl &&);
 
+    QString getName() const { return m_name; }
+
     // 获取具体值
     std::optional<bool> asBool() const;
     std::optional<int> asInt() const;
     std::optional<double> asReal() const;
     std::optional<QString> asString() const;
+    std::optional<ObjectImpl*> asObject() const;
     std::optional<QVector<bool>> asBoolArray() const;
     std::optional<QVector<int>> asIntArray() const;
     std::optional<QVector<double>> asDoubleArray() const;
     std::optional<QList<QString>> asStringArray() const;
 
-    // 打印属性信息
-    QString printString() const;
-
-
-    QString getName() const;
-
-    Object* getOwner() const;
+    ObjectImpl* getOwner() const { return m_owner; }
+    void setOwner(ObjectImpl* owner) { m_owner = owner; }
 
     QString getValueString() const;
+    // 打印属性信息
+    QString printInfo() const;
 
 private:
     // 构建属性值的内容
@@ -66,6 +83,7 @@ private:
 public:
     QString m_name;
     PropType m_type;
+    ObjectImpl* m_owner = nullptr;
     union {
         bool    m_bool;
         int     m_int;

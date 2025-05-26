@@ -84,7 +84,7 @@ bool ObjectImpl::hasProperty() const
 void ObjectImpl::addProperty(PropertyImpl *property)
 {
     if (property == nullptr ||
-        property->getOwner() != (Object*)this ||
+        property->getOwner() != (ObjectImpl*)this ||
         property->getValueString().isEmpty()) {
         return;
     }

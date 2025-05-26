@@ -16,6 +16,6 @@ void* Util::memAlloc(size_t size)
 void Util::memFree(void *ptr)
 {
     if (ptr) {
-        delete ptr;
+        free(ptr);
     }
 }

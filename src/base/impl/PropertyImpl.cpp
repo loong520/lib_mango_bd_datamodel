@@ -8,6 +8,188 @@
 
 using namespace mango::blockdiagram::datamodel;
 
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, bool value)
+{
+    if (!owner) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    if (name.isEmpty()) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PropertyImpl* impl = new PropertyImpl(name, value);
+    impl->setOwner(owner);
+    owner->addProperty(impl);
+    return impl;
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, int value)
+{
+    if (!owner) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    if (name.isEmpty()) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PropertyImpl* impl = new PropertyImpl(name, value);
+    impl->setOwner(owner);
+    owner->addProperty(impl);
+    return impl;
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, double value)
+{
+    if (!owner) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    if (name.isEmpty()) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PropertyImpl* impl = new PropertyImpl(name, value);
+    impl->setOwner(owner);
+    owner->addProperty(impl);
+    return impl;
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, const char *value)
+{
+    if (!owner) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    if (name.isEmpty()) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    if (!value) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PropertyImpl* impl = new PropertyImpl(name, value);
+    impl->setOwner(owner);
+    owner->addProperty(impl);
+    return impl;
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, const std::string &str)
+{
+    return New(owner, name, str.c_str());
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, ObjectImpl* value)
+{
+    if (!owner) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    if (name.isEmpty()) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    if (!value) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PropertyImpl* impl = new PropertyImpl(name, value);
+    impl->setOwner(owner);
+    owner->addProperty(impl);
+    return impl;
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, const QString& value)
+{
+    return New(owner, name, value.toStdString());
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, const QVector<bool> &vb)
+{
+    if (!owner) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    if (name.isEmpty()) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PropertyImpl* impl = new PropertyImpl(name, vb);
+    impl->setOwner(owner);
+    owner->addProperty(impl);
+    return impl;
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, const QVector<int> &vi)
+{
+    if (!owner) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    if (name.isEmpty()) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PropertyImpl* impl = new PropertyImpl(name, vi);
+    impl->setOwner(owner);
+    owner->addProperty(impl);
+    return impl;
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, const QVector<double> &vd)
+{
+    if (!owner) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    if (name.isEmpty()) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PropertyImpl* impl = new PropertyImpl(name, vd);
+    impl->setOwner(owner);
+    owner->addProperty(impl);
+    return impl;
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, const QList<QString>& ls)
+{
+    if (!owner) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    if (name.isEmpty()) {
+        // TODO: LOG_WARN
+        return nullptr;
+    }
+    PropertyImpl* impl = new PropertyImpl(name, ls);
+    impl->setOwner(owner);
+    owner->addProperty(impl);
+    return impl;
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, std::initializer_list<bool> il)
+{
+    return New(owner, name, QVector<bool>(il));
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, std::initializer_list<int> il)
+{
+    return New(owner, name, QVector<int>(il));
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, std::initializer_list<double> il)
+{
+    return New(owner, name, QVector<double>(il));
+}
+
+PropertyImpl* PropertyImpl::New(ObjectImpl* owner, const QString& name, std::initializer_list<const char *> il)
+{
+    return New(owner, name, QList<QString>(il.begin(), il.end()));
+}
+
 PropertyImpl::PropertyImpl()
 {
     m_type = PropType::UnKnown;
@@ -48,6 +230,13 @@ PropertyImpl::PropertyImpl(const QString& name, const char *str)
         memcpy_s(m_array.pointer, len, str, len - 1);
         static_cast<char *>(m_array.pointer)[len - 1] = '\0';
     }
+}
+
+PropertyImpl::PropertyImpl(const QString& name, ObjectImpl *value)
+{
+    m_name = name;
+    m_type = PropType::Object;
+    m_array.pointer = value->clone(); // 内部使用new，对应的释放才能使用delete
 }
 
 PropertyImpl::PropertyImpl(const QString& name, const std::string &str) : PropertyImpl(name, str.c_str())
@@ -137,6 +326,7 @@ PropertyImpl &PropertyImpl::operator=(const PropertyImpl &other)
     }
     m_name = other.m_name;
     m_type = other.m_type;
+    m_owner = other.m_owner;
     switch (other.m_type) {
         case PropType::Bool:
             m_bool = other.m_bool;
@@ -147,6 +337,11 @@ PropertyImpl &PropertyImpl::operator=(const PropertyImpl &other)
         case PropType::Double:
             m_double = other.m_double;
             break;
+        case PropType::Object: {
+            freeContent();
+            m_array.pointer = static_cast<ObjectImpl *>(other.m_array.pointer)->clone();
+            break;
+        }
         case PropType::String:
         case PropType::BoolArray:
         case PropType::IntArray:
@@ -181,6 +376,11 @@ PropertyImpl &PropertyImpl::operator=(PropertyImpl &&other)
 {
     m_name = other.m_name;
     m_type = other.m_type;
+    m_owner = other.m_owner;
+    other.m_name.clear();
+    other.m_type = PropType::UnKnown;
+    other.m_owner = nullptr;
+
     switch (other.m_type) {
         case PropType::Bool:
             m_bool = other.m_bool;
@@ -192,6 +392,7 @@ PropertyImpl &PropertyImpl::operator=(PropertyImpl &&other)
             m_double = other.m_double;
             break;
         case PropType::String:
+        case PropType::Object:
         case PropType::BoolArray:
         case PropType::IntArray:
         case PropType::DoubleArray:
@@ -238,6 +439,17 @@ std::optional<QString> PropertyImpl::asString() const
         return QString();
     }
     return QString(static_cast<const char *>(m_array.pointer));
+}
+
+std::optional<ObjectImpl*> PropertyImpl::asObject() const
+{
+    if (m_type!= PropType::Object) {
+        return std::nullopt;
+    }
+    if (m_array.pointer == nullptr) {
+        return nullptr;
+    }
+    return static_cast<ObjectImpl*>(m_array.pointer);
 }
 
 std::optional<QVector<bool>> PropertyImpl::asBoolArray() const
@@ -307,21 +519,24 @@ std::optional<QList<QString>> PropertyImpl::asStringArray() const
     return values;
 }
 
-QString PropertyImpl::printString() const
+QString PropertyImpl::getValueString() const
 {
     std::stringstream ss;
     switch (m_type) {
+        case PropType::UnKnown:
+            ss << "UnKnown";
+            break;
         case PropType::Bool:
-            ss << (m_bool ? "true" : "false") << " [Bool]";
+            ss << (m_bool ? "true" : "false");
             break;
         case PropType::Int:
-            ss << m_int << " [Int]";
+            ss << m_int;
             break;
         case PropType::Double:
-            ss << m_double << " [Double]";
+            ss << m_double;
             break;
         case PropType::String:
-            ss << std::string(static_cast<const char *>(m_array.pointer), m_array.len - 1) << " [String]";
+            ss << std::string(static_cast<const char *>(m_array.pointer), m_array.len - 1);
             break;
         case PropType::BoolArray: {
             for (quint32 i = 0; i < m_array.len; ++i) {
@@ -331,7 +546,6 @@ QString PropertyImpl::printString() const
                     ss << ", ";
                 }
             }
-            ss << " [BoolArray]";
             break;
         }
         case PropType::IntArray: {
@@ -342,7 +556,6 @@ QString PropertyImpl::printString() const
                     ss << ", ";
                 }
             }
-            ss << " [IntArray]";
             break;
         }
         case PropType::DoubleArray: {
@@ -353,37 +566,70 @@ QString PropertyImpl::printString() const
                     ss << ", ";
                 }
             }
-            ss << " [DoubleArray]";
             break;
         }
         case PropType::StringArray: {
             for (quint32 i = 0; i < m_array.len; ++i) {
                 PropertyImpl *pv = static_cast<PropertyImpl *>(m_array.pointer) + i;
-                ss << "`" << pv->printString().toStdString() << "`";
+                ss << "`" << pv->getValueString().toStdString() << "`";
                 if (i != m_array.len - 1) {
                     ss << ", ";
                 }
             }
-            ss << " [StringArray]";
             break;
         }
     }
     return QString::fromStdString(ss.str());
 }
 
-QString PropertyImpl::getName() const
+QString PropertyImpl::printInfo() const
 {
-    return QString();
-}
+    std::stringstream ss;
+    ss << m_name.toStdString() << ": " << getValueString().toStdString();
 
-Object* PropertyImpl::getOwner() const
-{
-    return nullptr;
-}
-
-QString PropertyImpl::getValueString() const
-{
-    return QString();
+    switch (m_type) {
+        case PropType::UnKnown: {
+            ss << " [UnKnown]";
+            break;
+        }
+        case PropType::Bool: {
+            ss << " [Bool]";
+            break;
+        }
+        case PropType::Int: {
+            ss << " [Int]";
+            break;
+        }
+        case PropType::Double: {
+            ss << " [Double]";
+            break;
+        }
+        case PropType::String: {
+            ss << " [String]";
+            break;
+        }
+        case PropType::Object: {
+            ss << " [" << static_cast<ObjectImpl *>(m_array.pointer)->getObjectType().getName().toStdString() << "]";
+            break;
+        }
+        case PropType::BoolArray: {
+            ss << " [BoolArray]";
+            break;
+        }
+        case PropType::IntArray: {
+            ss << " [IntArray]";
+            break;
+        }
+        case PropType::DoubleArray: {
+            ss << " [DoubleArray]";
+            break;
+        }
+        case PropType::StringArray: {
+            ss << " [StringArray]";
+            break;
+        }
+    }
+    return QString::fromStdString(ss.str());
 }
 
 void PropertyImpl::constructContent(const void *data, size_t valuesLen, size_t valueSize)
@@ -408,6 +654,12 @@ void PropertyImpl::freeContent()
         return;
     }
     switch (m_type) {
+        case PropType::Object: {
+            delete m_array.pointer;
+            m_array.pointer = nullptr;
+            m_array.len = 0;
+            break;
+        }
         case PropType::String:
         case PropType::BoolArray:
         case PropType::IntArray:

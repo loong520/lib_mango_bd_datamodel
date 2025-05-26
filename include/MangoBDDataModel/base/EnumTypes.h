@@ -70,12 +70,14 @@ enum class MANGO_BD_DATAMODEL_API PropType {
     Int,
     Double,
     String,
+    Object,
 
     /** array containing int, real, string or groups */
     BoolArray,
     IntArray,
     DoubleArray,
     StringArray,
+    ObjectArray,
 };
 
 
