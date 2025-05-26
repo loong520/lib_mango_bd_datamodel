@@ -12,6 +12,11 @@ Node* Node::New(Node* parent, bool isHierarchical, bool isRoot)
     return (Node*)NodeImpl::New((NodeImpl*)parent, isHierarchical, isRoot);
 }
 
+Node* Node::clone() const
+{
+    return (Node*)impl_ptr(Node)->clone();
+}
+
 QSizeF Node::getSize() const
 {
     return impl_ptr(Node)->getSize();

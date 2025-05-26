@@ -17,6 +17,11 @@ Arc* Arc::New(Shape* parent, double radius, const QPointF& center, double startA
     return (Arc*)ArcImpl::New((ShapeImpl*)parent, radius, center, startAngle, spanAngle);
 }
 
+Arc *Arc::clone() const
+{
+    return (Arc*)impl_ptr(Arc)->clone();
+}
+
 void Arc::setCenter(const QPointF center)
 {
     impl_ptr(Arc)->setCenter(center);

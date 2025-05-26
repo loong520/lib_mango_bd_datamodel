@@ -21,6 +21,10 @@ public:
     static Polygon* New(Shape* parent);
     static Polygon* New(Shape* parent, const QList<QPointF> &v);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    Polygon* clone() const;
+
     /// 转换为QPolygonF
     /// \return QPolygonF对象
     QPolygonF toQPolygon() const;

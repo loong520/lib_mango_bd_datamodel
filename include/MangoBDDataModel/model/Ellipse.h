@@ -17,6 +17,10 @@ public:
     static Ellipse* New(Shape* parent);
     static Ellipse* New(Shape* parent, double radiusX, double radiusY, const QPointF& center);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    Ellipse* clone() const;
+
     /// 设置椭圆的圆心坐标
     /// \param center 圆心坐标
     void setCenter(const QPointF& center);

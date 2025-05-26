@@ -19,6 +19,10 @@ public:
     /// \return 新的图形对象
     static Shape *New(GraphElement *parent);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    Shape *clone() const;
+
     /// 增加一个子图形
     /// \param shape 子图形
     void addSubShape(GObject *shape);

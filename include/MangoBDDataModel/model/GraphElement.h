@@ -18,6 +18,10 @@ class MANGO_BD_DATAMODEL_API GraphElement : public GObject {
 public:
     static GraphElement* New(Node* parent);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    GraphElement *clone() const;
+
     /// 设置名称
     /// \param name 名称
     void setName(const QString& name);

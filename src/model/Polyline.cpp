@@ -17,6 +17,11 @@ Polyline* Polyline::New(Shape* parent, const QList<QPointF> &v)
     return (Polyline*)PolylineImpl::New((ShapeImpl*)parent, v);
 }
 
+Polyline* Polyline::clone() const
+{
+    return (Polyline*)impl_ptr(Polyline)->clone();
+}
+
 int Polyline::size() const
 {
     return impl_ptr(Polyline)->size();

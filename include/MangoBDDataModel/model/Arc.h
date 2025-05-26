@@ -17,6 +17,10 @@ public:
     static Arc* New(Shape* parent);
     static Arc* New(Shape* parent, double radius, const QPointF& center, double startAngle, double spanAngle);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    Arc *clone() const;
+
     /// 设置圆心坐标
     /// \param center 圆心坐标
     void setCenter(const QPointF center);

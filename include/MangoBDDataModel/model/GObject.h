@@ -12,6 +12,9 @@ namespace datamodel {
 
 class MANGO_BD_DATAMODEL_API GObject : public Object {
 public:
+    /// 克隆对象
+    /// @return 克隆的对象指针
+    GObject *clone() const;
 
     /// 获取标志
     /// @return 标志

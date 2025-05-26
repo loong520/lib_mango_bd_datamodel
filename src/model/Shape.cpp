@@ -12,6 +12,11 @@ Shape *Shape::New(GraphElement *parent)
     return (Shape*)ShapeImpl::New((GraphElementImpl*)parent);
 }
 
+Shape *Shape::clone() const
+{
+    return (Shape*)impl_ptr(Shape)->clone();
+}
+
 void Shape::addSubShape(GObject *shape)
 {
     impl_ptr(Shape)->addSubShape((GObjectImpl*)shape);

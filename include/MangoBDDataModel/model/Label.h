@@ -17,6 +17,10 @@ class MANGO_BD_DATAMODEL_API Label : public GraphElement {
 public:
     static Label* New(GraphElement* parent);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    Label* clone() const;
+
     /// 设置文本
     /// \param text 文本
     void setText(const QString& text);

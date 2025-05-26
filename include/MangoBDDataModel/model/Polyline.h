@@ -21,6 +21,10 @@ public:
     static Polyline* New(Shape* parent);
     static Polyline* New(Shape* parent, const QList<QPointF> &v);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    Polyline* clone() const;
+
     /// 点数量
     /// \return 点数量
     int size() const;

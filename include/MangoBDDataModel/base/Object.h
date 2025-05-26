@@ -26,6 +26,10 @@ class Property;
 
 class MANGO_BD_DATAMODEL_API Object {
 public:
+    /// 克隆对象
+    /// @return 克隆的对象指针
+    Object *clone() const;
+
     /// 获取对象类型
     /// @return 对象类型
     ObjectType getObjectType() const;

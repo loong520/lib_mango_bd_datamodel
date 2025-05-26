@@ -17,6 +17,11 @@ Rectangle* Rectangle::New(Shape* parent, const QRectF &rect)
     return (Rectangle*)RectangleImpl::New((ShapeImpl*)parent, rect);
 }
 
+Rectangle* Rectangle::clone() const
+{
+    return (Rectangle*)impl_ptr(Rectangle)->clone();
+}
+
 void Rectangle::setRect(const QRectF &rect)
 {
     impl_ptr(Rectangle)->setRect(rect);

@@ -12,6 +12,11 @@ LibSymbol *LibSymbol::New(Node *parent)
     return (LibSymbol*)LibSymbolImpl::New((NodeImpl*)parent);
 }
 
+LibSymbol *LibSymbol::clone() const
+{
+    return (LibSymbol*)impl_ptr(LibSymbol)->clone();
+}
+
 void LibSymbol::addPin(Pin* pin)
 {
     impl_ptr(LibSymbol)->addPin((PinImpl*)pin);

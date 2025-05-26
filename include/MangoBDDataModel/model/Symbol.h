@@ -17,6 +17,10 @@ class MANGO_BD_DATAMODEL_API Symbol : public GraphElement {
 public:
     static Symbol *New(Node *parent, LibSymbol *libSymbol);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    Symbol *clone() const;
+
     /// 设置库符号
     /// \param aLibSymbol 库符号对象指针
     /// \note 引脚列表将相应更新, 库符号对象可以为 null, 以清除库符号链接以及引脚映射

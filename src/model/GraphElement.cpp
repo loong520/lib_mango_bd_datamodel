@@ -12,6 +12,11 @@ GraphElement* GraphElement::New(Node* parent)
     return (GraphElement*)GraphElementImpl::New((NodeImpl*)parent);
 }
 
+GraphElement *GraphElement::clone() const
+{
+    return (GraphElement*)impl_ptr(GraphElement)->clone();
+}
+
 void GraphElement::setName(const QString& name)
 {
     impl_ptr(GraphElement)->setName(name);

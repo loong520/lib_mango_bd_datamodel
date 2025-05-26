@@ -20,6 +20,10 @@ public:
     /// \return 新建连线对象
     static Net* New(Node* parent);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    Net* clone() const;
+
     /// 增加源引脚
     /// \param pin 源引脚
     void addSource(Pin* pin);

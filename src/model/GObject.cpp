@@ -7,6 +7,11 @@
 
 using namespace mango::blockdiagram::datamodel;
 
+GObject *GObject::clone() const
+{
+    return (GObject *)impl_ptr(GObject)->clone();
+}
+
 quint32 GObject::getFlags() const
 {
     return impl_ptr(GObject)->getFlags();

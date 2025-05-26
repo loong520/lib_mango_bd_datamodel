@@ -23,6 +23,10 @@ public:
     /// \note parent为空视为root节点，不会有shape
     static Node* New(Node* parent, bool isHierarchical = false, bool isRoot = false);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    Node* clone() const;
+
     /// 节点大小
     /// \return 大小
     QSizeF getSize() const;

@@ -20,6 +20,10 @@ public:
     static Rectangle* New(Shape* parent);
     static Rectangle* New(Shape* parent, const QRectF &rect);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    Rectangle* clone() const;
+
     void setRect(const QRectF &rect);
     inline QRectF getRect() const;
 

@@ -7,6 +7,11 @@
 
 using namespace mango::blockdiagram::datamodel;
 
+Object *Object::clone() const
+{
+    return (Object*)impl_ptr(Object)->clone();
+}
+
 ObjectType Object::getObjectType() const
 {
     return impl_ptr(Object)->getObjectType();

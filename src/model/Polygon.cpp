@@ -17,6 +17,11 @@ Polygon* Polygon::New(Shape* parent, const QList<QPointF> &v)
     return (Polygon*)PolygonImpl::New((ShapeImpl*)parent, v);
 }
 
+Polygon* Polygon::clone() const
+{
+    return (Polygon*)impl_ptr(Polygon)->clone();
+}
+
 QPolygonF Polygon::toQPolygon() const
 {
     return impl_ptr(Polygon)->toQPolygon();

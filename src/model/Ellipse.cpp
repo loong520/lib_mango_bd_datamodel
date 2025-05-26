@@ -17,6 +17,11 @@ Ellipse* Ellipse::New(Shape* parent, double radiusX, double radiusY, const QPoin
     return (Ellipse*)EllipseImpl::New((ShapeImpl*)parent, radiusX, radiusY, center);
 }
 
+Ellipse* Ellipse::clone() const
+{
+    return (Ellipse*)obj_impl_ptr(Ellipse, this)->clone();
+}
+
 void Ellipse::setCenter(const QPointF& center)
 {
     obj_impl_ptr(Ellipse, this)->setCenter(center);

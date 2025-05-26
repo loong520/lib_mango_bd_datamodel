@@ -17,6 +17,11 @@ Pin* Pin::New(LibSymbol* parent, const QString& name)
     return (Pin*)PinImpl::New((LibSymbolImpl*)parent, name);
 }
 
+Pin* Pin::clone() const
+{
+    return (Pin*)impl_ptr(Pin)->clone();
+}
+
 void Pin::setName(const QString& name)
 {
     impl_ptr(Pin)->setName(name);

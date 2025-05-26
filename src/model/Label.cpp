@@ -12,6 +12,11 @@ Label* Label::New(GraphElement* parent)
     return (Label*)LabelImpl::New((GraphElementImpl*)parent);
 }
 
+Label* Label::clone() const
+{
+    return (Label*)impl_ptr(Label)->clone();
+}
+
 void Label::setText(const QString& text)
 {
     impl_ptr(Label)->setText(text);

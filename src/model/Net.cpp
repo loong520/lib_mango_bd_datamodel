@@ -12,6 +12,11 @@ Net* Net::New(Node* parent)
     return (Net*)NetImpl::New((NodeImpl*)parent);
 }
 
+Net* Net::clone() const
+{
+    return (Net*)impl_ptr(Net)->clone();
+}
+
 void Net::addSource(Pin* pin)
 {
     impl_ptr(Net)->addSource((PinImpl*)pin);

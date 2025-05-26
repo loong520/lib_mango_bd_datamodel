@@ -14,6 +14,11 @@ Symbol *Symbol::New(Node *parent, LibSymbol *libSymbol)
     return (Symbol*)SymbolImpl::New((NodeImpl*)parent, (LibSymbolImpl*)libSymbol);
 }
 
+Symbol *Symbol::clone() const
+{
+    return (Symbol*)impl_ptr(Symbol)->clone();
+}
+
 void Symbol::setLibSymbol(LibSymbol *aLibSymbol)
 {
     impl_ptr(Symbol)->setLibSymbol((LibSymbolImpl*)aLibSymbol);

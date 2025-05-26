@@ -27,6 +27,10 @@ public:
     /// \param name 引脚名称
     static Pin* New(LibSymbol* parent, const QString& name);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    Pin* clone() const;
+
     /// 设置引脚名称
     /// \param name
     void setName(const QString& name);

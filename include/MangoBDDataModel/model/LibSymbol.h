@@ -15,6 +15,10 @@ class MANGO_BD_DATAMODEL_API LibSymbol : public GraphElement {
 public:
     static LibSymbol *New(Node *parent);
 
+    /// 克隆对象
+    /// \return 克隆的对象指针
+    LibSymbol *clone() const;
+
     /// 添加一个引脚
     /// \param pin 引脚对象
     void addPin(Pin* pin);
